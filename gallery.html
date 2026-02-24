@@ -417,27 +417,51 @@
       const IMAGE_COUNT = 12;
       const galleryGrid = document.getElementById('gallery-grid');
 
+      // Specific channels to pull images from
+      const CHANNEL_SLUGS = [
+        'shapes-dypizjsswgc',
+        'env-2pfju-fmqc8',
+        'objects-3sy7ezl5nxu',
+        'prototypes-5mhaprrs0r0',
+        'bionics-mnytvvjumno',
+        'form-scale',
+        'lively-spaces-ksjanmy0m5a',
+        'acme',
+        'interaction-rp2orqz7kd0',
+        'non-reusable'
+      ];
+
       const arenaHeaders = {
         'Authorization': `Bearer ${ARENA_TOKEN}`
       };
 
       async function fetchArenaImages() {
         try {
-          // Fetch user's content blocks using v3 API
-          const response = await fetch(`https://api.are.na/v3/users/${ARENA_USER_SLUG}/contents?per=100`, {
-            headers: arenaHeaders
-          });
-          if (!response.ok) throw new Error('Failed to fetch content');
-          const data = await response.json();
-          
-          // Filter for blocks with images
-          const allImages = data.data
-            .filter(block => block.image && block.image.src)
-            .map(block => ({
-              url: block.image.medium?.src || block.image.src,
-              title: block.title || '',
-              arenaUrl: `https://www.are.na/block/${block.id}`
-            }));
+          let allImages = [];
+
+          // Fetch images from each specified channel
+          for (const slug of CHANNEL_SLUGS) {
+            try {
+              const response = await fetch(`https://api.are.na/v3/channels/${slug}/contents?per=50`, {
+                headers: arenaHeaders
+              });
+              if (!response.ok) continue;
+              const data = await response.json();
+              
+              // Filter for blocks with images
+              const images = data.data
+                .filter(block => block.image && block.image.src)
+                .map(block => ({
+                  url: block.image.medium?.src || block.image.src,
+                  title: block.title || '',
+                  arenaUrl: `https://www.are.na/block/${block.id}`
+                }));
+              
+              allImages = allImages.concat(images);
+            } catch (e) {
+              console.warn(`Failed to fetch channel ${slug}:`, e);
+            }
+          }
 
           if (allImages.length === 0) {
             galleryGrid.innerHTML = '<p class="loading-message">No images found in Are.na.</p>';
