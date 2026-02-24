@@ -219,7 +219,7 @@
        ======================================== */
     .gallery-grid {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(4, 1fr);
       gap: 20px;
     }
 
@@ -342,7 +342,7 @@
       }
 
       .gallery-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, 1fr);
       }
 
       footer {
@@ -399,7 +399,7 @@
     <main class="main-content">
       <div class="page-content">
         <div class="gallery-grid" id="gallery-grid">
-          <p class="loading-message">Loading images from Are.na...</p>
+          <p class="loading-message">loading reference images from Are.na ...</p>
         </div>
       </div>
 
@@ -466,7 +466,7 @@
 
       async function fetchAllImages() {
         try {
-          galleryGrid.innerHTML = '<p class="loading-message">Loading images from Are.na...</p>';
+          galleryGrid.innerHTML = '<p class="loading-message">loading reference images from Are.na ...</p>';
 
           // Fetch images from each specified channel
           for (const slug of CHANNEL_SLUGS) {

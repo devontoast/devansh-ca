@@ -97,9 +97,11 @@
     .project-meta a:hover { color: #111111; }
 
     .project-images { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-top: 40px; }
-    .project-image { position: relative; width: 100%; padding-bottom: 75%; background-color: #D8D4CF; }
-    .project-image span { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #A8A4A0; font-size: 13px; }
-    .project-image.large { grid-column: 1 / -1; padding-bottom: 50%; }
+    .project-image { position: relative; width: 100%; padding-bottom: 66%; background-color: #D8D4CF; overflow: hidden; }
+    .project-image img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
+    .project-image.large { grid-column: 1 / -1; padding-bottom: 56%; }
+    .video-container { grid-column: 1 / -1; position: relative; width: 100%; padding-bottom: 56.25%; background-color: #D8D4CF; overflow: hidden; border-radius: 4px; }
+    .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; border-radius: 4px; }
 
     footer { display: flex; justify-content: space-between; align-items: center; padding: 40px 0; border-top: 1px solid #E8E5E0; font-size: 12px; color: #888888; margin-top: auto; }
     .footer-left, .footer-center, .footer-right { flex: 1; }
@@ -154,16 +156,22 @@
           <h1>Surface Tension</h1>
           <p class="project-description">Commissioned by the University of Ottawa. Kinetic sculpture featuring triangular undulating panels via linear actuators at their vertices. Surface treatment is stylized microorganisms from the Ottawa River, while the acrylic panels create a wave-like surface as they actuate.</p>
           <div class="project-meta">
-            <p>Completed: 2020</p>
-            <p><a href="https://sarahhodgson.work/surface-tension" target="_blank" rel="noopener">View project documentation →</a></p>
+            <p>Completed: 2018</p>
+            <p>By: Keshav Deeljur, Sarah Hodgson, Lucy Oulanova, Devansh Shah</p>
+            <p>Special thanks to: Hanan Anis, Chris Falconi, Atticus Gordon, David McDougall, Sarmad Nomani, Nikhil Peri, Sasha Phipps, Chantal Rodier, Laura Weller, Ali Sanaknaki, and Mohamed Abdrabou</p>
+            <p><a href="../images/surface-tension/article.pdf" target="_blank" rel="noopener">Read STEAM 2018 article (PDF) →</a></p>
           </div>
         </div>
         <div class="project-images">
-          <div class="project-image large"><span>Image 1</span></div>
-          <div class="project-image"><span>Image 2</span></div>
-          <div class="project-image"><span>Image 3</span></div>
-          <div class="project-image"><span>Image 4</span></div>
-          <div class="project-image"><span>Image 5</span></div>
+          <div class="project-image large"><img src="../images/surface-tension/cover.png" alt="Surface Tension front view"></div>
+          <div class="project-image"><img src="../images/surface-tension/02.png" alt="Surface Tension side view"></div>
+          <div class="project-image"><img src="../images/surface-tension/03.png" alt="Surface Tension detail"></div>
+          <div class="video-container">
+            <iframe src="https://www.youtube.com/embed/ZchE8lqpjxA" title="Surface Tension video" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          </div>
+          <div class="video-container">
+            <iframe src="https://www.youtube.com/embed/bd_U6hZmnvo" title="Surface Tension video 2" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          </div>
         </div>
       </div>
       <footer>
