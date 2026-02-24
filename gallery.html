@@ -39,6 +39,21 @@
       -moz-osx-font-smoothing: grayscale;
     }
 
+    .construction-banner {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background-color: #111111;
+      color: #FFFFFF;
+      text-align: center;
+      padding: 8px 20px;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      z-index: 1000;
+    }
+
     img {
       max-width: 100%;
       height: auto;
@@ -345,7 +360,8 @@
   </style>
 </head>
 <body>
-  <div class="site-wrapper">
+  <div class="construction-banner">Website is actively under construction</div>
+  <div class="site-wrapper" style="padding-top: 32px;">
     <!-- Mobile hamburger button -->
     <button class="hamburger" aria-label="Toggle menu">
       <span></span>
@@ -411,10 +427,9 @@
         document.body.style.overflow = mobileNav.classList.contains('active') ? 'hidden' : '';
       });
 
-      // Are.na Gallery Loader (using v3 API)
-      const ARENA_USER_SLUG = 'devansh-shah';
+      // Are.na Gallery Loader (using v3 API) with infinite scroll
       const ARENA_TOKEN = 'uDYG-Q4aZAjx_IZFmNV_JcO4VoaeJTgUGD7vnVoSaP0';
-      const IMAGE_COUNT = 12;
+      const IMAGES_PER_LOAD = 12;
       const galleryGrid = document.getElementById('gallery-grid');
 
       // Specific channels to pull images from
@@ -435,22 +450,27 @@
         'Authorization': `Bearer ${ARENA_TOKEN}`
       };
 
-      async function fetchArenaImages() {
+      let allImages = [];
+      let displayedCount = 0;
+      let isLoading = false;
+      let imagesLoaded = false;
+
+      async function fetchAllImages() {
         try {
-          let allImages = [];
+          galleryGrid.innerHTML = '<p class="loading-message">Loading images from Are.na...</p>';
 
           // Fetch images from each specified channel
           for (const slug of CHANNEL_SLUGS) {
             try {
-              const response = await fetch(`https://api.are.na/v3/channels/${slug}/contents?per=50`, {
+              const response = await fetch(`https://api.are.na/v3/channels/${slug}/contents?per=100`, {
                 headers: arenaHeaders
               });
               if (!response.ok) continue;
               const data = await response.json();
               
-              // Filter for blocks with images
+              // Filter for Image type blocks only (no PDFs, links, embeds, etc.)
               const images = data.data
-                .filter(block => block.image && block.image.src)
+                .filter(block => block.type === 'Image' && block.image && block.image.src)
                 .map(block => ({
                   url: block.image.medium?.src || block.image.src,
                   title: block.title || '',
@@ -468,18 +488,13 @@
             return;
           }
 
-          // Shuffle and pick random images
-          const shuffled = allImages.sort(() => Math.random() - 0.5);
-          const selectedImages = shuffled.slice(0, IMAGE_COUNT);
+          // Shuffle all images once
+          allImages = allImages.sort(() => Math.random() - 0.5);
+          imagesLoaded = true;
 
-          // Render gallery
-          galleryGrid.innerHTML = selectedImages.map(img => `
-            <div class="gallery-item">
-              <a href="${img.arenaUrl}" target="_blank" rel="noopener" title="${img.title}">
-                <img src="${img.url}" alt="${img.title || 'Are.na image'}" loading="lazy">
-              </a>
-            </div>
-          `).join('');
+          // Clear loading message and load first batch
+          galleryGrid.innerHTML = '';
+          loadMoreImages();
 
         } catch (error) {
           console.error('Error fetching Are.na images:', error);
@@ -487,7 +502,42 @@
         }
       }
 
-      fetchArenaImages();
+      function loadMoreImages() {
+        if (isLoading || !imagesLoaded) return;
+        if (displayedCount >= allImages.length) return;
+
+        isLoading = true;
+
+        const nextBatch = allImages.slice(displayedCount, displayedCount + IMAGES_PER_LOAD);
+        
+        nextBatch.forEach(img => {
+          const item = document.createElement('div');
+          item.className = 'gallery-item';
+          item.innerHTML = `
+            <a href="${img.arenaUrl}" target="_blank" rel="noopener" title="${img.title}">
+              <img src="${img.url}" alt="${img.title || 'Are.na image'}" loading="lazy">
+            </a>
+          `;
+          galleryGrid.appendChild(item);
+        });
+
+        displayedCount += nextBatch.length;
+        isLoading = false;
+      }
+
+      // Infinite scroll - load more when near bottom
+      window.addEventListener('scroll', () => {
+        if (isLoading || !imagesLoaded) return;
+        
+        const scrollPos = window.innerHeight + window.scrollY;
+        const threshold = document.body.offsetHeight - 500;
+        
+        if (scrollPos >= threshold) {
+          loadMoreImages();
+        }
+      });
+
+      fetchAllImages();
     });
   </script>
 </body>

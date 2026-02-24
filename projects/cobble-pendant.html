@@ -32,6 +32,21 @@
     ul { list-style: none; }
     img { max-width: 100%; height: auto; display: block; }
 
+    .construction-banner {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background-color: #111111;
+      color: #FFFFFF;
+      text-align: center;
+      padding: 8px 20px;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      z-index: 1000;
+    }
+
     .site-wrapper {
       display: grid;
       grid-template-columns: repeat(8, 1fr);
@@ -206,7 +221,7 @@
     .project-image {
       position: relative;
       width: 100%;
-      padding-bottom: 75%;
+      padding-bottom: 125%;
       background-color: #D8D4CF;
       overflow: hidden;
     }
@@ -231,7 +246,7 @@
 
     .project-image.large {
       grid-column: 1 / -1;
-      padding-bottom: 56%;
+      padding-bottom: 125%;
     }
 
     footer {
@@ -270,7 +285,6 @@
       .mobile-nav { display: flex; }
       .main-content { padding: 80px 20px 40px 20px; }
       .project-images { grid-template-columns: 1fr; }
-      .project-image.large { padding-bottom: 75%; }
       footer {
         flex-direction: column;
         gap: 16px;
@@ -284,7 +298,8 @@
   </style>
 </head>
 <body>
-  <div class="site-wrapper">
+  <div class="construction-banner">Website is actively under construction</div>
+  <div class="site-wrapper" style="padding-top: 32px;">
     <button class="hamburger" aria-label="Toggle menu">
       <span></span>
       <span></span>
@@ -321,7 +336,7 @@
         </div>
 
         <div class="project-images">
-          <div class="project-image large"><img src="../images/cobble-pendant/cover.png" alt="Cobble Pendant"></div>
+          <div class="project-image"><img src="../images/cobble-pendant/cover.png" alt="Cobble Pendant"></div>
           <div class="project-image"><img src="../images/cobble-pendant/02.png" alt="Cobble Pendant detail"></div>
           <div class="project-image"><img src="../images/cobble-pendant/03.png" alt="Cobble Pendant in space"></div>
           <div class="project-image"><img src="../images/cobble-pendant/04.png" alt="Cobble Pendant installation"></div>
