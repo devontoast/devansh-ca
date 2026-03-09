@@ -300,76 +300,6 @@
     }
 
     /* ========================================
-       LIGHTBOX
-       ======================================== */
-    .lightbox {
-      position: fixed;
-      inset: 0;
-      z-index: 2000;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      background-color: rgba(0, 0, 0, 0.92);
-      padding: 40px;
-      box-sizing: border-box;
-    }
-    .lightbox.active {
-      display: flex;
-    }
-    .lightbox-backdrop {
-      position: absolute;
-      inset: 0;
-      cursor: pointer;
-    }
-    .lightbox-content {
-      position: relative;
-      max-width: 90vw;
-      max-height: 90vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 24px;
-    }
-    .lightbox-content img {
-      max-width: 100%;
-      max-height: calc(90vh - 60px);
-      width: auto;
-      height: auto;
-      object-fit: contain;
-      border-radius: 4px;
-    }
-    .lightbox-close {
-      position: absolute;
-      top: -40px;
-      right: 0;
-      background: none;
-      border: none;
-      color: #FFFFFF;
-      font-size: 32px;
-      line-height: 1;
-      cursor: pointer;
-      padding: 0;
-      width: 40px;
-      height: 40px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: opacity 0.2s ease;
-    }
-    .lightbox-close:hover {
-      opacity: 0.8;
-    }
-    .lightbox-view-project {
-      color: #FFFFFF;
-      font-size: 13px;
-      text-decoration: underline;
-      transition: opacity 0.2s ease;
-    }
-    .lightbox-view-project:hover {
-      opacity: 0.8;
-    }
-
-    /* ========================================
        RESPONSIVE - MOBILE (<900px)
        ======================================== */
     @media (max-width: 900px) {
@@ -524,15 +454,6 @@
     </main>
   </div>
 
-  <div id="lightbox" class="lightbox" aria-hidden="true">
-    <div class="lightbox-backdrop" aria-label="Close"></div>
-    <div class="lightbox-content">
-      <button class="lightbox-close" aria-label="Close">&times;</button>
-      <img src="" alt="">
-      <a href="#" class="lightbox-view-project">View project</a>
-    </div>
-  </div>
-
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       const hamburger = document.querySelector('.hamburger');
@@ -542,41 +463,6 @@
         hamburger.classList.toggle('active');
         mobileNav.classList.toggle('active');
         document.body.style.overflow = mobileNav.classList.contains('active') ? 'hidden' : '';
-      });
-
-      var lightbox = document.getElementById('lightbox');
-      var lightboxImg = lightbox.querySelector('.lightbox-content img');
-      var lightboxLink = lightbox.querySelector('.lightbox-view-project');
-      var lightboxClose = lightbox.querySelector('.lightbox-close');
-      var lightboxBackdrop = lightbox.querySelector('.lightbox-backdrop');
-
-      document.querySelectorAll('.project-item').forEach(function(item) {
-        var img = item.querySelector('.project-thumb img');
-        if (!img) return;
-        item.addEventListener('click', function(e) {
-          e.preventDefault();
-          var src = img.getAttribute('src');
-          var alt = img.getAttribute('alt') || 'Project';
-          var href = item.getAttribute('href');
-          lightboxImg.setAttribute('src', src);
-          lightboxImg.setAttribute('alt', alt);
-          lightboxLink.setAttribute('href', href);
-          lightbox.classList.add('active');
-          lightbox.setAttribute('aria-hidden', 'false');
-          document.body.style.overflow = 'hidden';
-        });
-      });
-
-      function closeLightbox() {
-        lightbox.classList.remove('active');
-        lightbox.setAttribute('aria-hidden', 'true');
-        document.body.style.overflow = '';
-      }
-
-      if (lightboxClose) lightboxClose.addEventListener('click', closeLightbox);
-      if (lightboxBackdrop) lightboxBackdrop.addEventListener('click', closeLightbox);
-      document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape' && lightbox.classList.contains('active')) closeLightbox();
       });
     });
   </script>
