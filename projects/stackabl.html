@@ -80,7 +80,8 @@
     .project-meta p { margin-bottom: 4px; }
 
     .project-images { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-top: 40px; }
-    .project-image { position: relative; width: 100%; padding-bottom: 75%; background-color: #D8D4CF; }
+    .project-image { position: relative; width: 100%; padding-bottom: 75%; background-color: #D8D4CF; overflow: hidden; }
+    .project-image img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
     .project-image span { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #A8A4A0; font-size: 13px; }
     .project-image.large { grid-column: 1 / -1; padding-bottom: 50%; }
 
@@ -143,11 +144,15 @@
           </div>
         </div>
         <div class="project-images">
-          <div class="project-image large"><span>Image 1</span></div>
-          <div class="project-image"><span>Image 2</span></div>
-          <div class="project-image"><span>Image 3</span></div>
-          <div class="project-image"><span>Image 4</span></div>
-          <div class="project-image"><span>Image 5</span></div>
+          <div class="project-image large"><img src="../images/stackabl/cover.png" alt="Stackabl overview"></div>
+          <div class="project-image"><img src="../images/stackabl/02.png" alt="Stackabl Armchair"></div>
+          <div class="project-image"><img src="../images/stackabl/03.png" alt="Stackabl Chair"></div>
+          <div class="project-image"><img src="../images/stackabl/04.png" alt="Stackabl Chair detail"></div>
+          <div class="project-image"><img src="../images/stackabl/05.png" alt="Stackabl Seat"></div>
+          <div class="project-image"><img src="../images/stackabl/06.png" alt="Stackabl Arcilla pendant cluster"></div>
+          <div class="project-image"><img src="../images/stackabl/07.png" alt="Stackabl porch modern"></div>
+          <div class="project-image"><img src="../images/stackabl/08.png" alt="Stackabl porch modern 2"></div>
+          <div class="project-image"><img src="../images/stackabl/09.png" alt="Stackabl porch modern 3"></div>
         </div>
       </div>
       <footer>
