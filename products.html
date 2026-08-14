@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Gallery — Devansh Shah</title>
+<title>Products — Devansh Shah</title>
 <style>
 @font-face { font-family: 'Realtime Stencil'; src: url('https://devansh.ca/fonts/RealtimeStencilRounded-Semibold.otf') format('opentype'); font-weight: 600; font-style: normal; font-display: swap; }
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -48,13 +48,17 @@ ul { list-style: none; }
 .mobile-nav.active { opacity: 1; visibility: visible; }
 .mobile-nav a { font-size: 24px; }
 .main-content { flex: 1; width: 100%; max-width: 1400px; margin: 0 auto; padding: 48px 40px; display: flex; flex-direction: column; }
-.gallery-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
-.gallery-item { position: relative; width: 100%; background-color: #D8D4CF; overflow: hidden; padding-bottom: 75%; }
-.gallery-item img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
-.gallery-item a { display: block; width: 100%; height: 100%; }
-.loading-message { color: #888888; font-size: 13px; text-align: center; padding: 40px; grid-column: 1 / -1; }
-.gallery-item img { transition: opacity 0.3s ease; }
-.gallery-item:hover img { opacity: 0.85; }
+.page-title { font-family: Helvetica, Arial, sans-serif; font-weight: 400; font-size: 20px; margin-bottom: 32px; }
+.products-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+.product-item { display: block; }
+.product-thumb { position: relative; width: 100%; padding-bottom: 100%; background-color: #D8D4CF; overflow: hidden; margin-bottom: 10px; }
+.product-thumb img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease; }
+.product-item:hover .product-thumb img { transform: scale(1.02); }
+.product-name { font-size: 13px; }
+.product-item.coming-soon { cursor: default; }
+.product-item.coming-soon .product-thumb img { filter: grayscale(1); opacity: 0.5; }
+.product-item.coming-soon .product-name { color: #A8A4A0; }
+.coming-soon-caption { font-size: 11px; color: #A8A4A0; }
 footer { width: 100%; border-top: 1px solid #E8E5E0; font-size: 12px; color: #888888; }
 .footer-inner { max-width: 1400px; margin: 0 auto; padding: 32px 40px; }
 .footer-bottom { display: flex; justify-content: space-between; align-items: center; }
@@ -82,7 +86,7 @@ footer { width: 100%; border-top: 1px solid #E8E5E0; font-size: 12px; color: #88
   .hamburger { display: block; }
   .mobile-nav { display: flex; }
   .main-content { padding: 32px 20px; }
-  .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+  .products-grid { grid-template-columns: repeat(2, 1fr); }
   .footer-inner { padding: 32px 20px; }
   .footer-bottom { flex-direction: column; gap: 16px; text-align: center; }
   .newsletter { text-align: center; }
@@ -97,7 +101,7 @@ footer { width: 100%; border-top: 1px solid #E8E5E0; font-size: 12px; color: #88
     <div class="topnav-inner">
       <a href="index.html" class="logo">ODS</a>
       <nav class="nav-links">
-        <a href="products.html">Products</a>
+        <a href="products.html" class="active">Products</a>
         <a href="projects.html">Projects</a>
         <a href="about.html">About</a>
         <a href="press.html">Press</a>
@@ -136,8 +140,29 @@ footer { width: 100%; border-top: 1px solid #E8E5E0; font-size: 12px; color: #88
     <p class="newsletter-success" id="newsletter-modal-success" style="display:none;">Thanks — you're on the list.</p>
   </div>
   <main class="main-content">
-    <div class="gallery-grid" id="gallery-grid">
-      <p class="loading-message">loading reference images from Are.na ...</p>
+    <h1 class="page-title">Products</h1>
+    <div class="products-grid">
+      <a href="product-tun-pendant.html" class="product-item">
+        <div class="product-thumb"><img src="https://devansh.ca/images/tun-pendant/cover.png" alt="Tun Pendant"></div>
+        <div class="product-name">Tun Pendant</div>
+      </a>
+      <a href="product-cobble-pendant.html" class="product-item">
+        <div class="product-thumb"><img src="https://devansh.ca/images/cobble-pendant/cover.png" alt="Cobble Pendant"></div>
+        <div class="product-name">Cobble Pendant</div>
+      </a>
+      <a href="product-pleat-pendant.html" class="product-item">
+        <div class="product-thumb"><img src="images/pleat-collection/web-lifestyle-01.jpg" alt="Pleat Pendant"></div>
+        <div class="product-name">Pleat Pendant</div>
+      </a>
+      <a href="product-pearl-lamp.html" class="product-item">
+        <div class="product-thumb"><img src="https://shop.devansh.ca/cdn/shop/files/L1003952.jpg" alt="Pearl Lamp"></div>
+        <div class="product-name">Pearl Lamp</div>
+      </a>
+      <div class="product-item coming-soon">
+        <div class="product-thumb"><img src="https://devansh.ca/images/touch-point-sconce/cover.png" alt="Touch Point Sconce"></div>
+        <div class="product-name">Touch Point Sconce</div>
+        <div class="coming-soon-caption">Coming soon</div>
+      </div>
     </div>
   </main>
   <footer>
@@ -207,63 +232,6 @@ document.addEventListener('DOMContentLoaded', function() {
       subscribeNewsletter('newsletter-modal-form', 'newsletter-modal-success');
     });
   }
-
-  var ARENA_TOKEN = 'uDYG-Q4aZAjx_IZFmNV_JcO4VoaeJTgUGD7vnVoSaP0';
-  var IMAGES_PER_LOAD = 12;
-  var galleryGrid = document.getElementById('gallery-grid');
-  var CHANNEL_SLUGS = ['shapes-dypizjsswgc','env-2pfju-fmqc8','objects-3sy7ezl5nxu','prototypes-5mhaprrs0r0','bionics-mnytvvjumno','form-scale','lively-spaces-ksjanmy0m5a','acme','interaction-rp2orqz7kd0','non-reusable'];
-  var arenaHeaders = { 'Authorization': 'Bearer ' + ARENA_TOKEN };
-  var allImages = [];
-  var displayedCount = 0;
-  var isLoading = false;
-  var imagesLoaded = false;
-
-  function fetchAllImages() {
-    galleryGrid.innerHTML = '<p class="loading-message">loading reference images from Are.na ...</p>';
-    var fetches = CHANNEL_SLUGS.map(function(slug) {
-      return fetch('https://api.are.na/v3/channels/' + slug + '/contents?per=100', { headers: arenaHeaders })
-        .then(function(r) { return r.ok ? r.json() : { data: [] }; })
-        .then(function(data) {
-          return data.data.filter(function(block) { return block.type === 'Image' && block.image && block.image.src; })
-            .map(function(block) { return { url: (block.image.medium && block.image.medium.src) || block.image.src, title: block.title || '', arenaUrl: 'https://www.are.na/block/' + block.id }; });
-        })
-        .catch(function() { return []; });
-    });
-    Promise.all(fetches).then(function(results) {
-      allImages = [].concat.apply([], results);
-      if (allImages.length === 0) { galleryGrid.innerHTML = '<p class="loading-message">No images found in Are.na.</p>'; return; }
-      allImages = allImages.sort(function() { return Math.random() - 0.5; });
-      imagesLoaded = true;
-      galleryGrid.innerHTML = '';
-      loadMoreImages();
-    }).catch(function() {
-      galleryGrid.innerHTML = '<p class="loading-message">Failed to load images. Please try again later.</p>';
-    });
-  }
-
-  function loadMoreImages() {
-    if (isLoading || !imagesLoaded) return;
-    if (displayedCount >= allImages.length) return;
-    isLoading = true;
-    var nextBatch = allImages.slice(displayedCount, displayedCount + IMAGES_PER_LOAD);
-    nextBatch.forEach(function(img) {
-      var item = document.createElement('div');
-      item.className = 'gallery-item';
-      item.innerHTML = '<a href="' + img.arenaUrl + '" target="_blank" rel="noopener" title="' + img.title + '"><img src="' + img.url + '" alt="' + (img.title || 'Are.na image') + '" loading="lazy"></a>';
-      galleryGrid.appendChild(item);
-    });
-    displayedCount += nextBatch.length;
-    isLoading = false;
-  }
-
-  window.addEventListener('scroll', function() {
-    if (isLoading || !imagesLoaded) return;
-    var scrollPos = window.innerHeight + window.scrollY;
-    var threshold = document.body.offsetHeight - 500;
-    if (scrollPos >= threshold) loadMoreImages();
-  });
-
-  fetchAllImages();
 });
 </script>
 </body>

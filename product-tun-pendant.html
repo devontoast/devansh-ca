@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Gallery — Devansh Shah</title>
+<title>Tun Pendant — Devansh Shah</title>
 <style>
 @font-face { font-family: 'Realtime Stencil'; src: url('https://devansh.ca/fonts/RealtimeStencilRounded-Semibold.otf') format('opentype'); font-weight: 600; font-style: normal; font-display: swap; }
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -48,13 +48,27 @@ ul { list-style: none; }
 .mobile-nav.active { opacity: 1; visibility: visible; }
 .mobile-nav a { font-size: 24px; }
 .main-content { flex: 1; width: 100%; max-width: 1400px; margin: 0 auto; padding: 48px 40px; display: flex; flex-direction: column; }
-.gallery-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
-.gallery-item { position: relative; width: 100%; background-color: #D8D4CF; overflow: hidden; padding-bottom: 75%; }
-.gallery-item img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
-.gallery-item a { display: block; width: 100%; height: 100%; }
-.loading-message { color: #888888; font-size: 13px; text-align: center; padding: 40px; grid-column: 1 / -1; }
-.gallery-item img { transition: opacity 0.3s ease; }
-.gallery-item:hover img { opacity: 0.85; }
+.back-link { display: inline-block; margin-bottom: 24px; font-size: 13px; color: #888888; }
+.back-link:hover { color: #111111; }
+.product-layout { display: grid; grid-template-columns: 1.2fr 1fr; gap: 60px; align-items: start; }
+.product-gallery { display: flex; flex-direction: column; gap: 16px; }
+.product-image { position: relative; width: 100%; padding-bottom: 100%; background-color: #D8D4CF; overflow: hidden; }
+.product-image img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
+.gallery-dots { display: none; justify-content: center; gap: 8px; margin-top: 12px; }
+.gallery-dot { width: 6px; height: 6px; border-radius: 50%; background: #C9C5BE; border: none; cursor: pointer; padding: 0; }
+.gallery-dot.active { background: #111111; }
+.product-image.placeholder span { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #A8A4A0; font-size: 12px; text-align: center; padding: 10px; }
+.product-info { position: sticky; top: 100px; }
+.product-info h1 { font-family: Helvetica, Arial, sans-serif; font-size: 24px; font-weight: 400; margin-bottom: 12px; }
+.product-price { font-size: 16px; margin-bottom: 4px; }
+.price-note { font-size: 12px; color: #A8A4A0; margin-bottom: 20px; }
+.product-description { max-width: 480px; margin-bottom: 16px; line-height: 1.8; }
+.product-description p { margin-bottom: 12px; }
+.product-description p:last-child { margin-bottom: 0; }
+.product-meta { color: #888888; font-size: 13px; line-height: 1.6; margin-bottom: 24px; }
+.product-meta p { margin-bottom: 4px; }
+.buy-button { display: inline-block; margin-top: 8px; padding: 12px 28px; background-color: #111111; color: #F1F0EF; font-family: 'Realtime Stencil', sans-serif; font-size: 13px; border: none; cursor: pointer; }
+.buy-button:hover { background-color: #333333; }
 footer { width: 100%; border-top: 1px solid #E8E5E0; font-size: 12px; color: #888888; }
 .footer-inner { max-width: 1400px; margin: 0 auto; padding: 32px 40px; }
 .footer-bottom { display: flex; justify-content: space-between; align-items: center; }
@@ -82,7 +96,12 @@ footer { width: 100%; border-top: 1px solid #E8E5E0; font-size: 12px; color: #88
   .hamburger { display: block; }
   .mobile-nav { display: flex; }
   .main-content { padding: 32px 20px; }
-  .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+  .product-layout { grid-template-columns: 1fr; }
+  .product-info { position: static; }
+  .product-gallery { flex-direction: row; overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; gap: 0; scrollbar-width: none; }
+  .product-gallery::-webkit-scrollbar { display: none; }
+  .product-image { flex: 0 0 100%; scroll-snap-align: start; }
+  .gallery-dots { display: flex; }
   .footer-inner { padding: 32px 20px; }
   .footer-bottom { flex-direction: column; gap: 16px; text-align: center; }
   .newsletter { text-align: center; }
@@ -97,7 +116,7 @@ footer { width: 100%; border-top: 1px solid #E8E5E0; font-size: 12px; color: #88
     <div class="topnav-inner">
       <a href="index.html" class="logo">ODS</a>
       <nav class="nav-links">
-        <a href="products.html">Products</a>
+        <a href="products.html" class="active">Products</a>
         <a href="projects.html">Projects</a>
         <a href="about.html">About</a>
         <a href="press.html">Press</a>
@@ -136,8 +155,30 @@ footer { width: 100%; border-top: 1px solid #E8E5E0; font-size: 12px; color: #88
     <p class="newsletter-success" id="newsletter-modal-success" style="display:none;">Thanks — you're on the list.</p>
   </div>
   <main class="main-content">
-    <div class="gallery-grid" id="gallery-grid">
-      <p class="loading-message">loading reference images from Are.na ...</p>
+    <a href="products.html" class="back-link">&larr; Back to Products</a>
+    <div class="product-layout">
+      <div class="product-gallery">
+        <div class="product-image"><img src="https://devansh.ca/images/tun-pendant/cover.png" alt="Tun Pendant"></div>
+        <div class="product-image"><img src="https://devansh.ca/images/tun-pendant/02.png" alt="Tun Pendant in space"></div>
+        <div class="product-image"><img src="images/tiger-baby-coffee-clay/web-PT_TigerBaby_V1-31.jpg" alt="Tun Pendant installed at Tiger Baby Coffee &amp; Clay"></div>
+      </div>
+      <div class="gallery-dots" id="gallery-dots"></div>
+      <div class="product-info">
+        <h1>Tun Pendant</h1>
+        <div class="product-price">$600 CAD</div>
+        <div class="price-note">One size</div>
+        <div class="product-description">
+          <p>The Tun Pendant is a large-format 3D-printed pendant in the tradition of Noguchi and Nelson: soft diffused light, familiar form.</p>
+          <p>The surface finish carries soft ripples that catch and create shadows depending on the viewing angle. The shade diffuses light radially while directing it downward, both volumetric and functional at once.</p>
+        </div>
+        <div class="product-meta">
+          <p>Dimensions: 450mm diameter, 400mm height.</p>
+          <p>Materials: custom PETG, 3D-printed.</p>
+          <p>Bulb: E26, 3000K, dimmable — included.</p>
+          <p>Made to order — ships in 4 weeks.</p>
+        </div>
+        <button class="buy-button" id="add-to-cart-btn">Add to cart</button>
+      </div>
     </div>
   </main>
   <footer>
@@ -207,63 +248,29 @@ document.addEventListener('DOMContentLoaded', function() {
       subscribeNewsletter('newsletter-modal-form', 'newsletter-modal-success');
     });
   }
-
-  var ARENA_TOKEN = 'uDYG-Q4aZAjx_IZFmNV_JcO4VoaeJTgUGD7vnVoSaP0';
-  var IMAGES_PER_LOAD = 12;
-  var galleryGrid = document.getElementById('gallery-grid');
-  var CHANNEL_SLUGS = ['shapes-dypizjsswgc','env-2pfju-fmqc8','objects-3sy7ezl5nxu','prototypes-5mhaprrs0r0','bionics-mnytvvjumno','form-scale','lively-spaces-ksjanmy0m5a','acme','interaction-rp2orqz7kd0','non-reusable'];
-  var arenaHeaders = { 'Authorization': 'Bearer ' + ARENA_TOKEN };
-  var allImages = [];
-  var displayedCount = 0;
-  var isLoading = false;
-  var imagesLoaded = false;
-
-  function fetchAllImages() {
-    galleryGrid.innerHTML = '<p class="loading-message">loading reference images from Are.na ...</p>';
-    var fetches = CHANNEL_SLUGS.map(function(slug) {
-      return fetch('https://api.are.na/v3/channels/' + slug + '/contents?per=100', { headers: arenaHeaders })
-        .then(function(r) { return r.ok ? r.json() : { data: [] }; })
-        .then(function(data) {
-          return data.data.filter(function(block) { return block.type === 'Image' && block.image && block.image.src; })
-            .map(function(block) { return { url: (block.image.medium && block.image.medium.src) || block.image.src, title: block.title || '', arenaUrl: 'https://www.are.na/block/' + block.id }; });
-        })
-        .catch(function() { return []; });
-    });
-    Promise.all(fetches).then(function(results) {
-      allImages = [].concat.apply([], results);
-      if (allImages.length === 0) { galleryGrid.innerHTML = '<p class="loading-message">No images found in Are.na.</p>'; return; }
-      allImages = allImages.sort(function() { return Math.random() - 0.5; });
-      imagesLoaded = true;
-      galleryGrid.innerHTML = '';
-      loadMoreImages();
-    }).catch(function() {
-      galleryGrid.innerHTML = '<p class="loading-message">Failed to load images. Please try again later.</p>';
+  var addToCartBtn = document.getElementById('add-to-cart-btn');
+  if (addToCartBtn) {
+    addToCartBtn.addEventListener('click', function() {
+      addToCart({ id: 'gid://shopify/ProductVariant/54328789172537', name: 'Tun Pendant', price: 600, image: 'https://devansh.ca/images/tun-pendant/cover.png' });
     });
   }
-
-  function loadMoreImages() {
-    if (isLoading || !imagesLoaded) return;
-    if (displayedCount >= allImages.length) return;
-    isLoading = true;
-    var nextBatch = allImages.slice(displayedCount, displayedCount + IMAGES_PER_LOAD);
-    nextBatch.forEach(function(img) {
-      var item = document.createElement('div');
-      item.className = 'gallery-item';
-      item.innerHTML = '<a href="' + img.arenaUrl + '" target="_blank" rel="noopener" title="' + img.title + '"><img src="' + img.url + '" alt="' + (img.title || 'Are.na image') + '" loading="lazy"></a>';
-      galleryGrid.appendChild(item);
+  var gallery = document.querySelector('.product-gallery');
+  var galleryImages = gallery.querySelectorAll('.product-image');
+  var dotsWrap = document.getElementById('gallery-dots');
+  galleryImages.forEach(function(img, i) {
+    var dot = document.createElement('button');
+    dot.className = 'gallery-dot' + (i === 0 ? ' active' : '');
+    dot.setAttribute('aria-label', 'Go to photo ' + (i + 1));
+    dot.addEventListener('click', function() {
+      gallery.scrollTo({ left: img.offsetLeft, behavior: 'smooth' });
     });
-    displayedCount += nextBatch.length;
-    isLoading = false;
-  }
-
-  window.addEventListener('scroll', function() {
-    if (isLoading || !imagesLoaded) return;
-    var scrollPos = window.innerHeight + window.scrollY;
-    var threshold = document.body.offsetHeight - 500;
-    if (scrollPos >= threshold) loadMoreImages();
+    dotsWrap.appendChild(dot);
   });
-
-  fetchAllImages();
+  var galleryDots = dotsWrap.querySelectorAll('.gallery-dot');
+  gallery.addEventListener('scroll', function() {
+    var index = Math.round(gallery.scrollLeft / gallery.clientWidth);
+    galleryDots.forEach(function(d, i) { d.classList.toggle('active', i === index); });
+  });
 });
 </script>
 </body>

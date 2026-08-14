@@ -1,480 +1,233 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>About — Devansh Shah</title>
-  <style>
-    /* ========================================
-       FONTS
-       ======================================== */
-    @font-face {
-      font-family: 'Realtime Stencil';
-      src: url('/fonts/RealtimeStencilRounded-Semibold.otf') format('opentype');
-      font-weight: 600;
-      font-style: normal;
-      font-display: swap;
-    }
-
-    /* ========================================
-       CSS RESET & BASE
-       ======================================== */
-    *, *::before, *::after {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      font-family: 'Realtime Stencil', -apple-system, BlinkMacSystemFont, sans-serif;
-      font-size: 14px;
-      line-height: 1.7;
-      color: #111111;
-      background-color: #F5F2ED;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-    }
-
-    img {
-      max-width: 100%;
-      height: auto;
-      display: block;
-      border-radius: 4px;
-    }
-
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-
-    ul {
-      list-style: none;
-    }
-
-    /* ========================================
-       LAYOUT - 8 COLUMN GRID
-       ======================================== */
-    .site-wrapper {
-      display: grid;
-      grid-template-columns: repeat(8, 1fr);
-      min-height: 100vh;
-    }
-
-    /* ========================================
-       NAVIGATION - FIXED LEFT SIDEBAR
-       ======================================== */
-    .sidebar {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: calc(25% - 20px);
-      height: 100vh;
-      padding: 40px;
-      display: flex;
-      flex-direction: column;
-      z-index: 100;
-    }
-
-    .logo {
-      font-family: Helvetica, Arial, sans-serif;
-      font-size: 14px;
-      font-weight: 400;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      margin-bottom: 60px;
-    }
-
-    .nav-links {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    .nav-links a {
-      font-size: 13px;
-      position: relative;
-      transition: opacity 0.2s ease;
-    }
-
-    .nav-links a::after {
-      content: '';
-      position: absolute;
-      bottom: -2px;
-      left: 0;
-      width: 0;
-      height: 1px;
-      background-color: #111111;
-      transition: width 0.2s ease;
-    }
-
-    .nav-links a:hover::after,
-    .nav-links a.active::after {
-      width: 100%;
-    }
-
-    /* Mobile hamburger button */
-    .hamburger {
-      display: none;
-      position: fixed;
-      top: 20px;
-      left: 20px;
-      width: 30px;
-      height: 24px;
-      background: none;
-      border: none;
-      cursor: pointer;
-      z-index: 200;
-      padding: 0;
-    }
-
-    .hamburger span {
-      display: block;
-      width: 100%;
-      height: 2px;
-      background-color: #111111;
-      margin-bottom: 6px;
-      transition: transform 0.3s ease, opacity 0.3s ease;
-    }
-
-    .hamburger span:last-child {
-      margin-bottom: 0;
-    }
-
-    .hamburger.active span:nth-child(1) {
-      transform: translateY(8px) rotate(45deg);
-    }
-
-    .hamburger.active span:nth-child(2) {
-      opacity: 0;
-    }
-
-    .hamburger.active span:nth-child(3) {
-      transform: translateY(-8px) rotate(-45deg);
-    }
-
-    /* Mobile nav overlay */
-    .mobile-nav {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100vh;
-      background-color: #F5F2ED;
-      z-index: 150;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      gap: 30px;
-      opacity: 0;
-      visibility: hidden;
-      transition: opacity 0.3s ease, visibility 0.3s ease;
-    }
-
-    .mobile-nav.active {
-      opacity: 1;
-      visibility: visible;
-    }
-
-    .mobile-nav a {
-      font-size: 24px;
-    }
-
-    /* ========================================
-       MAIN CONTENT AREA
-       ======================================== */
-    .main-content {
-      grid-column: 3 / 9;
-      padding: 40px 60px 40px 40px;
-      min-height: calc(100vh - 100px);
-      display: flex;
-      flex-direction: column;
-    }
-
-    .page-content {
-      flex: 1;
-    }
-
-    /* ========================================
-       ABOUT SECTION
-       ======================================== */
-    .about-grid {
-      display: grid;
-      grid-template-columns: 1fr 1.5fr;
-      gap: 60px;
-    }
-
-    .about-portrait {
-      position: relative;
-      width: 100%;
-      padding-bottom: 133%;
-      background-color: #D8D4CF;
-      overflow: hidden;
-    }
-
-    .about-portrait img {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .about-portrait span {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      color: #A8A4A0;
-      font-size: 13px;
-    }
-
-    .about-content {
-      display: flex;
-      flex-direction: column;
-      gap: 60px;
-    }
-
-    .about-narrative p {
-      margin-bottom: 20px;
-      font-size: 14px;
-      line-height: 1.8;
-    }
-
-    .about-narrative p:last-child {
-      margin-bottom: 0;
-    }
-
-    .about-narrative a {
-      text-decoration: underline;
-      text-underline-offset: 2px;
-    }
-
-    .about-narrative a:hover {
-      color: #888888;
-    }
-
-    .about-contact {
-      margin-top: 60px;
-    }
-
-    .about-contact p {
-      font-size: 14px;
-      margin-bottom: 8px;
-    }
-
-    .about-contact a {
-      text-decoration: underline;
-      text-underline-offset: 2px;
-    }
-
-    .about-contact a:hover {
-      color: #888888;
-    }
-
-    /* ========================================
-       FOOTER
-       ======================================== */
-    footer {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 40px 0;
-      border-top: 1px solid #E8E5E0;
-      font-size: 12px;
-      color: #888888;
-      margin-top: auto;
-    }
-
-    .footer-left,
-    .footer-center,
-    .footer-right {
-      flex: 1;
-    }
-
-    .footer-center {
-      text-align: center;
-    }
-
-    .footer-right {
-      text-align: right;
-      display: flex;
-      justify-content: flex-end;
-      gap: 16px;
-    }
-
-    .footer-right a {
-      display: inline-flex;
-      align-items: center;
-      transition: color 0.2s ease;
-    }
-
-    .footer-right a:hover {
-      color: #111111;
-    }
-
-    .footer-right svg {
-      width: 18px;
-      height: 18px;
-    }
-
-    /* ========================================
-       RESPONSIVE - MOBILE (<900px)
-       ======================================== */
-    @media (max-width: 900px) {
-      .site-wrapper {
-        display: block;
-      }
-
-      .sidebar {
-        display: none;
-      }
-
-      .hamburger {
-        display: block;
-      }
-
-      .mobile-nav {
-        display: flex;
-      }
-
-      .main-content {
-        padding: 80px 20px 40px 20px;
-      }
-
-      .about-grid {
-        grid-template-columns: 1fr;
-        gap: 40px;
-      }
-
-      .about-portrait {
-        max-width: 100%;
-        padding-bottom: 0;
-        height: auto;
-      }
-
-      .about-portrait img {
-        position: relative;
-        width: 100%;
-        height: auto;
-        object-fit: contain;
-      }
-
-      footer {
-        flex-direction: column;
-        gap: 16px;
-        text-align: center;
-      }
-
-      .footer-left,
-      .footer-center,
-      .footer-right {
-        text-align: center;
-        justify-content: center;
-      }
-    }
-  </style>
-  <!-- Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-KG1R8ZTR41"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-KG1R8ZTR41');
-  </script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About — Devansh Shah</title>
+<style>
+@font-face { font-family: 'Realtime Stencil'; src: url('https://devansh.ca/fonts/RealtimeStencilRounded-Semibold.otf') format('opentype'); font-weight: 600; font-style: normal; font-display: swap; }
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Realtime Stencil', -apple-system, BlinkMacSystemFont, sans-serif; font-size: 14px; line-height: 1.7; color: #111111; background-color: #F1F0EF; -webkit-font-smoothing: antialiased; }
+img { max-width: 100%; height: auto; display: block; border-radius: 4px; }
+a { color: inherit; text-decoration: none; }
+ul { list-style: none; }
+.site-wrapper { display: flex; flex-direction: column; min-height: 100vh; }
+.topnav { width: 100%; border-bottom: 1px solid #E8E5E0; }
+.topnav-inner { max-width: 1400px; margin: 0 auto; padding: 24px 40px; display: flex; justify-content: space-between; align-items: center; }
+.topnav .logo { font-family: Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; letter-spacing: 0.15em; text-transform: uppercase; }
+.topnav .nav-links { display: flex; flex-direction: row; gap: 32px; }
+.topnav .nav-links a { font-size: 13px; position: relative; }
+.topnav .nav-links a::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 1px; background-color: #111111; transition: width 0.2s ease; }
+.topnav .nav-links a:hover::after, .topnav .nav-links a.active::after { width: 100%; }
+.cart-toggle { background: none; border: none; font-family: 'Realtime Stencil', sans-serif; font-size: 13px; cursor: pointer; color: #111111; display: flex; align-items: center; gap: 6px; }
+.cart-count { display: inline-flex; align-items: center; justify-content: center; min-width: 16px; height: 16px; padding: 0 4px; border-radius: 8px; background: #111111; color: #F1F0EF; font-size: 10px; }
+.cart-overlay { position: fixed; inset: 0; background: rgba(17,17,17,0.3); opacity: 0; visibility: hidden; transition: opacity 0.2s ease, visibility 0.2s ease; z-index: 300; }
+.cart-overlay.active { opacity: 1; visibility: visible; }
+.cart-drawer { position: fixed; top: 0; right: 0; width: 380px; max-width: 100%; height: 100vh; background: #F1F0EF; border-left: 1px solid #E8E5E0; z-index: 301; display: flex; flex-direction: column; transform: translateX(100%); transition: transform 0.3s ease; }
+.cart-drawer.active { transform: translateX(0); }
+.cart-drawer-header { display: flex; justify-content: space-between; align-items: center; padding: 24px; border-bottom: 1px solid #E8E5E0; font-size: 14px; }
+.cart-close { background: none; border: none; font-size: 20px; cursor: pointer; line-height: 1; color: #111111; }
+.cart-items { flex: 1; overflow-y: auto; padding: 16px 24px; }
+.cart-item { display: flex; gap: 12px; padding: 16px 0; border-bottom: 1px solid #E8E5E0; }
+.cart-item-image { width: 64px; height: 64px; background: #D8D4CF; flex-shrink: 0; overflow: hidden; border-radius: 4px; }
+.cart-item-image img { width: 100%; height: 100%; object-fit: cover; }
+.cart-item-info { flex: 1; display: flex; flex-direction: column; gap: 4px; }
+.cart-item-name { font-size: 13px; }
+.cart-item-price { font-size: 12px; color: #888888; }
+.cart-item-controls { display: flex; align-items: center; gap: 10px; margin-top: 4px; }
+.cart-qty-btn { width: 20px; height: 20px; border: 1px solid #E8E5E0; background: none; cursor: pointer; font-size: 12px; line-height: 1; }
+.cart-remove { font-size: 11px; color: #A8A4A0; cursor: pointer; text-decoration: underline; text-underline-offset: 2px; background: none; border: none; }
+.cart-empty { color: #888888; font-size: 13px; padding: 40px 0; text-align: center; }
+.cart-footer { padding: 24px; border-top: 1px solid #E8E5E0; }
+.cart-subtotal { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 16px; }
+.cart-checkout-btn { width: 100%; padding: 14px; background-color: #111111; color: #F1F0EF; font-family: 'Realtime Stencil', sans-serif; font-size: 13px; border: none; cursor: pointer; }
+.cart-checkout-btn:hover { background-color: #333333; }
+.hamburger { display: none; background: none; border: none; cursor: pointer; padding: 0; width: 24px; height: 18px; }
+.hamburger span { display: block; width: 100%; height: 2px; background-color: #111111; margin-bottom: 5px; }
+.mobile-nav { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background-color: #F1F0EF; z-index: 150; flex-direction: column; justify-content: center; align-items: center; gap: 30px; opacity: 0; visibility: hidden; }
+.mobile-nav.active { opacity: 1; visibility: visible; }
+.mobile-nav a { font-size: 24px; }
+.main-content { flex: 1; width: 100%; max-width: 1400px; margin: 0 auto; padding: 48px 40px; display: flex; flex-direction: column; }
+.about-grid { display: grid; grid-template-columns: 1fr 1.5fr; gap: 60px; }
+.about-portrait { position: relative; width: 100%; padding-bottom: 133%; background-color: #D8D4CF; overflow: hidden; }
+.about-portrait img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
+.about-content { display: flex; flex-direction: column; gap: 60px; }
+.about-narrative p { margin-bottom: 20px; font-size: 14px; line-height: 1.8; }
+.about-narrative p:last-child { margin-bottom: 0; }
+.about-narrative a { text-decoration: underline; text-underline-offset: 2px; }
+.about-narrative a:hover { color: #888888; }
+.about-contact p { font-size: 14px; margin-bottom: 8px; }
+.about-contact a { text-decoration: underline; text-underline-offset: 2px; }
+.about-contact a:hover { color: #888888; }
+footer { width: 100%; border-top: 1px solid #E8E5E0; font-size: 12px; color: #888888; }
+.footer-inner { max-width: 1400px; margin: 0 auto; padding: 32px 40px; }
+.footer-bottom { display: flex; justify-content: space-between; align-items: center; }
+.newsletter { padding-bottom: 24px; margin-bottom: 24px; border-bottom: 1px solid #E8E5E0; }
+.newsletter-heading { font-size: 13px; margin-bottom: 12px; color: #111111; }
+.newsletter-form { display: flex; gap: 8px; max-width: 360px; }
+.newsletter-input { flex: 1; padding: 10px 12px; border: 1px solid #E8E5E0; background: transparent; font-family: 'Realtime Stencil', sans-serif; font-size: 13px; color: #111111; }
+.newsletter-input::placeholder { color: #A8A4A0; }
+.newsletter-submit { padding: 10px 20px; background-color: #111111; color: #F1F0EF; border: none; font-family: 'Realtime Stencil', sans-serif; font-size: 13px; cursor: pointer; }
+.newsletter-submit:hover { background-color: #333333; }
+.newsletter-success { font-size: 13px; color: #888888; margin-top: 8px; }
+.newsletter-overlay { position: fixed; inset: 0; background: rgba(17,17,17,0.3); opacity: 0; visibility: hidden; transition: opacity 0.2s ease, visibility 0.2s ease; z-index: 400; }
+.newsletter-overlay.active { opacity: 1; visibility: visible; }
+.newsletter-modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -48%); width: 400px; max-width: 90%; background: #F1F0EF; border: 1px solid #E8E5E0; padding: 32px; z-index: 401; opacity: 0; visibility: hidden; transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease; }
+.newsletter-modal.active { opacity: 1; visibility: visible; transform: translate(-50%, -50%); }
+.newsletter-modal-close { position: absolute; top: 16px; right: 16px; background: none; border: none; font-size: 20px; cursor: pointer; color: #111111; line-height: 1; }
+.newsletter-modal-heading { font-family: Helvetica, Arial, sans-serif; font-size: 16px; margin-bottom: 8px; padding-right: 24px; }
+.newsletter-modal-sub { font-size: 13px; color: #888888; margin-bottom: 20px; }
+.footer-left, .footer-center, .footer-right { flex: 1; }
+.footer-center { text-align: center; }
+.footer-right { text-align: right; display: flex; justify-content: flex-end; gap: 16px; }
+.footer-right svg { width: 18px; height: 18px; }
+@media (max-width: 900px) {
+  .topnav .nav-links { display: none; }
+  .hamburger { display: block; }
+  .mobile-nav { display: flex; }
+  .main-content { padding: 32px 20px; }
+  .about-grid { grid-template-columns: 1fr; gap: 40px; }
+  .about-portrait { max-width: 100%; padding-bottom: 0; height: auto; }
+  .about-portrait img { position: relative; width: 100%; height: auto; object-fit: contain; }
+  .footer-inner { padding: 32px 20px; }
+  .footer-bottom { flex-direction: column; gap: 16px; text-align: center; }
+  .newsletter { text-align: center; }
+  .newsletter-form { flex-direction: column; max-width: 100%; }
+  .footer-left, .footer-center, .footer-right { text-align: center; justify-content: center; }
+}
+</style>
 </head>
 <body>
-  <div class="site-wrapper">
-    <!-- Mobile hamburger button -->
-    <button class="hamburger" aria-label="Toggle menu">
-      <span></span>
-      <span></span>
-      <span></span>
-    </button>
-
-    <!-- Mobile navigation overlay -->
-    <nav class="mobile-nav">
-      <a href="index.html">Work</a>
-      <a href="about.html">About</a>
-      <a href="gallery.html">Gallery</a>
-      <a href="https://shop.devansh.ca">Shop</a>
-    </nav>
-
-    <!-- Desktop sidebar navigation -->
-    <nav class="sidebar">
-      <a href="index.html" class="logo">DS</a>
-      <ul class="nav-links">
-        <li><a href="index.html">Work</a></li>
-        <li><a href="about.html" class="active">About</a></li>
-        <li><a href="gallery.html">Gallery</a></li>
-        <li><a href="https://shop.devansh.ca">Shop</a></li>
-      </ul>
-    </nav>
-
-    <!-- Main content area -->
-    <main class="main-content">
-      <div class="page-content">
-        <div class="about-grid">
-          <div class="about-portrait">
-            <img src="images/portrait.png" alt="Devansh Shah">
-          </div>
-          <div class="about-content">
-            <div class="about-narrative">
-              <p>Engineer and designer based in Toronto, Canada.</p>
-              <p>Started with highschool robotics <a href="https://www.thebluealliance.com/team/1241" target="_blank" rel="noopener">Team 1241</a>.</p>
-              <p>Studied mechanical engineering and Computing Technology at the University of Ottawa.</p>
-              <p>After graduating, worked with Jeffrey Forrest at <a href="https://www.stacklab.ca" target="_blank" rel="noopener">Stacklab</a> and <a href="https://www.stackabl.shop" target="_blank" rel="noopener">Stackabl</a>.</p>
-              <p>Started my independent studio practice in 2024.</p>
-              <p>Currently working on the design and production of technology leaning objects.</p>
-            </div>
-            <div class="about-contact">
-              <p><a href="mailto:office@devansh.ca">office@devansh.ca</a></p>
-              <p><a href="tel:+16479384817">647 938 4817</a></p>
-              <p><a href="https://instagram.com/devanshcshah" target="_blank" rel="noopener">instagram.com/devanshcshah</a></p>
-              <p>Toronto, Canada</p>
-            </div>
-          </div>
+<div class="site-wrapper">
+  <header class="topnav">
+    <div class="topnav-inner">
+      <a href="index.html" class="logo">ODS</a>
+      <nav class="nav-links">
+        <a href="products.html">Products</a>
+        <a href="projects.html">Projects</a>
+        <a href="about.html" class="active">About</a>
+        <a href="press.html">Press</a>
+      </nav>
+      <button class="cart-toggle" id="cart-toggle" aria-label="Open cart">Cart <span class="cart-count" id="cart-count">0</span></button>
+      <button class="hamburger" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+    </div>
+  </header>
+  <nav class="mobile-nav">
+    <a href="products.html">Products</a>
+    <a href="projects.html">Projects</a>
+    <a href="about.html">About</a>
+    <a href="press.html">Press</a>
+  </nav>
+  <div class="cart-overlay" id="cart-overlay"></div>
+  <aside class="cart-drawer" id="cart-drawer">
+    <div class="cart-drawer-header">
+      <span>Cart</span>
+      <button class="cart-close" id="cart-close" aria-label="Close cart">&times;</button>
+    </div>
+    <div class="cart-items" id="cart-items"></div>
+    <div class="cart-footer">
+      <div class="cart-subtotal"><span>Subtotal</span><span id="cart-subtotal">$0 CAD</span></div>
+      <button class="cart-checkout-btn" id="cart-checkout-btn">Checkout</button>
+    </div>
+  </aside>
+  <div class="newsletter-overlay" id="newsletter-overlay"></div>
+  <div class="newsletter-modal" id="newsletter-modal">
+    <button class="newsletter-modal-close" id="newsletter-modal-close" aria-label="Close">&times;</button>
+    <p class="newsletter-modal-heading">Stay up to date with the studio.</p>
+    <p class="newsletter-modal-sub">New releases, studio updates, and early access — straight to your inbox.</p>
+    <form class="newsletter-form" id="newsletter-modal-form">
+      <input type="email" class="newsletter-input" id="newsletter-modal-input" placeholder="Email" required>
+      <button type="submit" class="newsletter-submit">Sign up</button>
+    </form>
+    <p class="newsletter-success" id="newsletter-modal-success" style="display:none;">Thanks — you're on the list.</p>
+  </div>
+  <main class="main-content">
+    <div class="about-grid">
+      <div class="about-portrait">
+        <img src="https://devansh.ca/images/portrait.png" alt="Devansh Shah">
+      </div>
+      <div class="about-content">
+        <div class="about-narrative">
+          <p>The Office of Devansh Shah (ODS) is a Toronto based design studio and manufacturer focussed on using new technologies to produce design objects.</p>
+          <p>Currently we are exploring how 3D printing can be used in both commercial and consumer lighting products.</p>
+        </div>
+        <div class="about-contact">
+          <p><a href="mailto:office@devansh.ca">office@devansh.ca</a></p>
+          <p><a href="tel:+16479384817">647 938 4817</a></p>
+          <p><a href="https://instagram.com/devanshcshah" target="_blank" rel="noopener">instagram.com/devanshcshah</a></p>
+          <p>Toronto, Canada</p>
         </div>
       </div>
-
-      <!-- FOOTER -->
-      <footer>
-        <div class="footer-left">devansh.ca</div>
-        <div class="footer-center">Toronto, Ontario</div>
-        <div class="footer-right">
-          <a href="https://instagram.com/devanshcshah" target="_blank" rel="noopener" aria-label="Instagram">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-            </svg>
-          </a>
-          <a href="https://www.are.na/devansh-shah/" target="_blank" rel="noopener" aria-label="Are.na">
-            <svg viewBox="0 0 24 24" fill="currentColor">
-              <path d="M4 4h6v6H4V4zm10 0h6v6h-6V4zM4 14h6v6H4v-6zm10 0h6v6h-6v-6z"/>
-            </svg>
-          </a>
-        </div>
-      </footer>
-    </main>
-  </div>
-
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const hamburger = document.querySelector('.hamburger');
-      const mobileNav = document.querySelector('.mobile-nav');
-
-      hamburger.addEventListener('click', function() {
-        hamburger.classList.toggle('active');
-        mobileNav.classList.toggle('active');
-        document.body.style.overflow = mobileNav.classList.contains('active') ? 'hidden' : '';
-      });
+    </div>
+  </main>
+  <footer>
+    <div class="footer-inner">
+      <div class="newsletter">
+        <p class="newsletter-heading">Stay up to date with the studio.</p>
+        <form class="newsletter-form" id="newsletter-form">
+          <input type="email" class="newsletter-input" id="newsletter-input" placeholder="Email" required>
+          <button type="submit" class="newsletter-submit">Sign up</button>
+        </form>
+        <p class="newsletter-success" id="newsletter-success" style="display:none;">Thanks — you're on the list.</p>
+      </div>
+      <div class="footer-bottom">
+      <div class="footer-left">devansh.ca</div>
+      <div class="footer-center">Toronto, Ontario</div>
+      <div class="footer-right">
+        <a href="https://instagram.com/devanshcshah" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+        <a href="https://www.are.na/devansh-shah/" target="_blank" rel="noopener" aria-label="Are.na"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 4h6v6H4V4zm10 0h6v6h-6V4zM4 14h6v6H4v-6zm10 0h6v6h-6v-6z"/></svg></a>
+      </div>
+      </div>
+    </div>
+  </footer>
+</div>
+<script src="shopify-cart.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var hamburger = document.querySelector('.hamburger');
+  var mobileNav = document.querySelector('.mobile-nav');
+  hamburger.addEventListener('click', function() {
+    hamburger.classList.toggle('active');
+    mobileNav.classList.toggle('active');
+  });
+  var NEWSLETTER_KEY = 'ods_newsletter_seen';
+  function subscribeNewsletter(formId, successId) {
+    document.getElementById(formId).style.display = 'none';
+    document.getElementById(successId).style.display = 'block';
+    localStorage.setItem(NEWSLETTER_KEY, '1');
+  }
+  var footerNewsletterForm = document.getElementById('newsletter-form');
+  if (footerNewsletterForm) {
+    footerNewsletterForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      subscribeNewsletter('newsletter-form', 'newsletter-success');
     });
-  </script>
+  }
+  var newsletterOverlay = document.getElementById('newsletter-overlay');
+  var newsletterModal = document.getElementById('newsletter-modal');
+  var newsletterModalForm = document.getElementById('newsletter-modal-form');
+  var newsletterModalClose = document.getElementById('newsletter-modal-close');
+  function openNewsletterModal() {
+    newsletterModal.classList.add('active');
+    newsletterOverlay.classList.add('active');
+  }
+  function closeNewsletterModal() {
+    newsletterModal.classList.remove('active');
+    newsletterOverlay.classList.remove('active');
+    localStorage.setItem(NEWSLETTER_KEY, '1');
+  }
+  if (newsletterModal && !localStorage.getItem(NEWSLETTER_KEY)) {
+    setTimeout(openNewsletterModal, 1200);
+  }
+  if (newsletterModalClose) { newsletterModalClose.addEventListener('click', closeNewsletterModal); }
+  if (newsletterOverlay) { newsletterOverlay.addEventListener('click', closeNewsletterModal); }
+  if (newsletterModalForm) {
+    newsletterModalForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      subscribeNewsletter('newsletter-modal-form', 'newsletter-modal-success');
+    });
+  }
+});
+</script>
 </body>
 </html>
