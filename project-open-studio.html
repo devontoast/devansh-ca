@@ -57,7 +57,7 @@ ul { list-style: none; }
 .project-detail-description { font-size: 14px; line-height: 1.8; color: #333333; }
 .project-detail-description a { text-decoration: underline; text-underline-offset: 2px; }
 .project-detail-description a:hover { color: #888888; }
-.project-photo-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; margin-bottom: 64px; }
+.project-photo-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; margin-bottom: 64px; align-items: start; }
 .project-photo { width: 100%; background-color: #D8D4CF; overflow: hidden; }
 .project-photo img { width: 100%; height: auto; display: block; }
 .book-section { border-top: 1px solid #E8E5E0; padding-top: 48px; }
@@ -68,6 +68,9 @@ ul { list-style: none; }
 .book-controls button { background: none; border: 1px solid #E8E5E0; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; font-size: 14px; color: #111111; }
 .book-controls button:hover { background-color: #E8E5E0; }
 .book-page-indicator { font-size: 12px; color: #888888; min-width: 50px; text-align: center; }
+.book-download { text-align: center; margin-top: 24px; }
+.book-download a { font-size: 13px; color: #111111; text-decoration: underline; text-underline-offset: 2px; }
+.book-download a:hover { color: #888888; }
 footer { width: 100%; border-top: 1px solid #E8E5E0; font-size: 12px; color: #888888; }
 .footer-inner { max-width: 1400px; margin: 0 auto; padding: 32px 40px; }
 .footer-bottom { display: flex; justify-content: space-between; align-items: center; }
@@ -157,17 +160,17 @@ footer { width: 100%; border-top: 1px solid #E8E5E0; font-size: 12px; color: #88
       <p class="project-detail-description">Open Studio was a design show sharing the process behind finished work. Exhibitors included Devansh Shah, <a href="https://hanmade.kr" target="_blank" rel="noopener">Peter Han</a>, and <a href="https://adamfuhrer.com" target="_blank" rel="noopener">Adam Fuhrer</a>. A take-away mini book was also produced for the show, walking through the development process behind the Pearl Lamp. Flip through it below.</p>
     </div>
     <div class="project-photo-grid">
-      <div class="project-photo"><img src="images/open-studio/web-20250124-DSC03811.jpg" alt="Open Studio, January 2025"></div>
-      <div class="project-photo"><img src="images/open-studio/web-20250124-DSC03813.jpg" alt="Open Studio exhibit"></div>
-      <div class="project-photo"><img src="images/open-studio/web-20250124-DSC03830.jpg" alt="Open Studio exhibit"></div>
-      <div class="project-photo"><img src="images/open-studio/web-20250124-DSC03841.jpg" alt="Open Studio exhibit"></div>
       <div class="project-photo"><img src="images/open-studio/web-20250125-DSC03893.jpg" alt="Open Studio exhibit"></div>
+      <div class="project-photo"><img src="images/open-studio/web-20250125-DSC03906.jpg" alt="Open Studio worktable with sculptural forms and prototypes"></div>
+      <div class="project-photo"><img src="images/open-studio/web-20250124-DSC03813.jpg" alt="Open Studio exhibit"></div>
       <div class="project-photo"><img src="images/open-studio/web-20250125-DSC03895.jpg" alt="Open Studio exhibit"></div>
       <div class="project-photo"><img src="images/open-studio/web-20250125-DSC03903.jpg" alt="Visitors flipping through the Open Studio mini book"></div>
-      <div class="project-photo"><img src="images/open-studio/web-20250125-DSC03906.jpg" alt="Open Studio worktable with sculptural forms and prototypes"></div>
       <div class="project-photo"><img src="images/open-studio/web-20250125-DSC03912.jpg" alt="Overhead view of Open Studio figurine parts laid out on a worktable"></div>
+      <div class="project-photo"><img src="images/open-studio/web-20250124-DSC03811.jpg" alt="Open Studio, January 2025"></div>
+      <div class="project-photo"><img src="images/open-studio/web-20250124-DSC03841.jpg" alt="Open Studio exhibit"></div>
       <div class="project-photo"><img src="images/open-studio/web-20250125-DSC03915.jpg" alt="Wall of prints at Open Studio"></div>
       <div class="project-photo"><img src="images/open-studio/web-20250125-DSC03919.jpg" alt="Visitors at Open Studio"></div>
+      <div class="project-photo"><img src="images/open-studio/web-20250124-DSC03830.jpg" alt="Open Studio exhibit"></div>
     </div>
     <div class="book-section">
       <h2 class="book-heading">Open Studio Mini Book</h2>
@@ -177,6 +180,9 @@ footer { width: 100%; border-top: 1px solid #E8E5E0; font-size: 12px; color: #88
         <button id="book-prev" aria-label="Previous page">&larr;</button>
         <span class="book-page-indicator" id="book-page-indicator"></span>
         <button id="book-next" aria-label="Next page">&rarr;</button>
+      </div>
+      <div class="book-download">
+        <a href="images/open-studio-book/open-studio-mini-book.pdf" download="Open Studio Mini Book.pdf">Download the mini book (PDF)</a>
       </div>
     </div>
   </main>
@@ -281,7 +287,8 @@ document.addEventListener('DOMContentLoaded', function() {
       showCover: true,
       usePortrait: true,
       mobileScrollSupport: true,
-      maxShadowOpacity: 0.5
+      maxShadowOpacity: 0.3,
+      flippingTime: 500
     });
     pageFlip.loadFromImages(images);
     var indicator = document.getElementById('book-page-indicator');
