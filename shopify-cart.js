@@ -121,7 +121,31 @@ var SHOPIFY_CONFIG = {
     });
   }
 
-  // Public API — mirrors the old mock cart's function names so page code barely changes.
+  // Newsletter signup, writes straight into the Shopify customer list with
+  // marketing consent turned on. Uses the same public storefront token as
+  // the cart above, no separate email service needed. A random unused
+  // password is generated to satisfy the API; it is never shown to the
+  // customer and there is no login flow tied to it.
+  window.subscribeToNewsletter = function (email) {
+    var randomPassword = 'ods-' + Math.random().toString(36).slice(2) + Date.now().toString(36);
+    var mutation = 'mutation customerCreate($input: CustomerCreateInput!) { customerCreate(input: $input) { customer { id } userErrors { field message } } }';
+    return storefrontFetch(mutation, { input: { email: email, password: randomPassword, acceptsMarketing: true } }).then(function (res) {
+      var payload = res.data && res.data.customerCreate;
+      if (!payload) return { ok: false };
+      if (payload.userErrors && payload.userErrors.length) {
+        var alreadySubscribed = payload.userErrors.some(function (e) { return /taken|already/i.test(e.message); });
+        if (alreadySubscribed) return { ok: true, existing: true };
+        console.error('subscribeToNewsletter errors', payload.userErrors);
+        return { ok: false, errors: payload.userErrors };
+      }
+      return { ok: true };
+    }).catch(function (err) {
+      console.error('subscribeToNewsletter failed', err);
+      return { ok: false, error: err };
+    });
+  };
+
+  // Public API, mirrors the old mock cart's function names so page code barely changes.
   // item = { id: '<Shopify variant GID>', name, price, image }
   window.addToCart = function (item) {
     getOrCreateCart().then(function (cart) {
@@ -131,7 +155,7 @@ var SHOPIFY_CONFIG = {
         : linesAdd(cart.id, item.id, 1);
       p.then(function () { renderCart(); openCart(); }).catch(function (err) {
         console.error('addToCart failed', err);
-        alert('Could not add to cart — check the Storefront API token in shopify-cart.js.');
+        alert('Could not add to cart. Check the Storefront API token in shopify-cart.js.');
       });
     });
   };
@@ -154,11 +178,17 @@ var SHOPIFY_CONFIG = {
     var countEl = document.getElementById('cart-count');
     var itemsWrap = document.getElementById('cart-items');
     var subtotalEl = document.getElementById('cart-subtotal');
+    var toggleEl = document.getElementById('cart-toggle');
     if (!countEl || !itemsWrap || !subtotalEl) return;
 
     var lines = currentCart ? currentCart.lines : [];
     var count = lines.reduce(function (sum, l) { return sum + l.qty; }, 0);
     countEl.textContent = count;
+
+    if (toggleEl) {
+      toggleEl.style.display = count > 0 ? '' : 'none';
+      if (count === 0) closeCart();
+    }
 
     if (lines.length === 0) {
       itemsWrap.innerHTML = '<p class="cart-empty">Your cart is empty.</p>';

@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Open Studio | Devansh Shah</title>
+<style>
+@font-face { font-family: 'Realtime Stencil'; src: url('https://devansh.ca/fonts/RealtimeStencilRounded-Semibold.otf') format('opentype'); font-weight: 600; font-style: normal; font-display: swap; }
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Realtime Stencil', -apple-system, BlinkMacSystemFont, sans-serif; font-size: 14px; line-height: 1.7; color: #111111; background-color: #F1F0EF; -webkit-font-smoothing: antialiased; }
+img { max-width: 100%; height: auto; display: block; border-radius: 4px; }
+a { color: inherit; text-decoration: none; }
+ul { list-style: none; }
+.site-wrapper { display: flex; flex-direction: column; min-height: 100vh; }
+.construction-bar { position: sticky; top: 0; z-index: 500; width: 100%; background-color: #111111; color: #FFFFFF; text-align: center; font-size: 12px; letter-spacing: 0.02em; padding: 8px 16px; }
+.topnav { width: 100%; border-bottom: 1px solid #E8E5E0; }
+.topnav-inner { max-width: 1400px; margin: 0 auto; padding: 24px 40px; display: flex; justify-content: space-between; align-items: center; }
+.topnav .logo { font-family: Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; letter-spacing: 0.15em; text-transform: uppercase; }
+.topnav .nav-links { display: flex; flex-direction: row; gap: 32px; }
+.topnav .nav-links a { font-size: 13px; position: relative; }
+.topnav .nav-links a::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 1px; background-color: #111111; transition: width 0.2s ease; }
+.topnav .nav-links a:hover::after, .topnav .nav-links a.active::after { width: 100%; }
+.cart-toggle { background: none; border: none; font-family: 'Realtime Stencil', sans-serif; font-size: 13px; cursor: pointer; color: #111111; display: flex; align-items: center; gap: 6px; }
+.cart-count { display: inline-flex; align-items: center; justify-content: center; min-width: 16px; height: 16px; padding: 0 4px; border-radius: 8px; background: #111111; color: #F1F0EF; font-size: 10px; }
+.cart-overlay { position: fixed; inset: 0; background: rgba(17,17,17,0.3); opacity: 0; visibility: hidden; transition: opacity 0.2s ease, visibility 0.2s ease; z-index: 300; }
+.cart-overlay.active { opacity: 1; visibility: visible; }
+.cart-drawer { position: fixed; top: 0; right: 0; width: 380px; max-width: 100%; height: 100vh; background: #F1F0EF; border-left: 1px solid #E8E5E0; z-index: 301; display: flex; flex-direction: column; transform: translateX(100%); transition: transform 0.3s ease; }
+.cart-drawer.active { transform: translateX(0); }
+.cart-drawer-header { display: flex; justify-content: space-between; align-items: center; padding: 24px; border-bottom: 1px solid #E8E5E0; font-size: 14px; }
+.cart-close { background: none; border: none; font-size: 20px; cursor: pointer; line-height: 1; color: #111111; }
+.cart-items { flex: 1; overflow-y: auto; padding: 16px 24px; }
+.cart-item { display: flex; gap: 12px; padding: 16px 0; border-bottom: 1px solid #E8E5E0; }
+.cart-item-image { width: 64px; height: 64px; background: #D8D4CF; flex-shrink: 0; overflow: hidden; border-radius: 4px; }
+.cart-item-image img { width: 100%; height: 100%; object-fit: cover; }
+.cart-item-info { flex: 1; display: flex; flex-direction: column; gap: 4px; }
+.cart-item-name { font-size: 13px; }
+.cart-item-price { font-size: 12px; color: #888888; }
+.cart-item-controls { display: flex; align-items: center; gap: 10px; margin-top: 4px; }
+.cart-qty-btn { width: 20px; height: 20px; border: 1px solid #E8E5E0; background: none; cursor: pointer; font-size: 12px; line-height: 1; }
+.cart-remove { font-size: 11px; color: #A8A4A0; cursor: pointer; text-decoration: underline; text-underline-offset: 2px; background: none; border: none; }
+.cart-empty { color: #888888; font-size: 13px; padding: 40px 0; text-align: center; }
+.cart-footer { padding: 24px; border-top: 1px solid #E8E5E0; }
+.cart-subtotal { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 16px; }
+.cart-checkout-btn { width: 100%; padding: 14px; background-color: #111111; color: #F1F0EF; font-family: 'Realtime Stencil', sans-serif; font-size: 13px; border: none; cursor: pointer; }
+.cart-checkout-btn:hover { background-color: #333333; }
+.hamburger { display: none; background: none; border: none; cursor: pointer; padding: 0; width: 24px; height: 18px; }
+.hamburger span { display: block; width: 100%; height: 2px; background-color: #111111; margin-bottom: 5px; }
+.mobile-nav { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background-color: #F1F0EF; z-index: 150; flex-direction: column; justify-content: center; align-items: center; gap: 30px; opacity: 0; visibility: hidden; }
+.mobile-nav.active { opacity: 1; visibility: visible; }
+.mobile-nav a { font-size: 24px; }
+.main-content { flex: 1; width: 100%; max-width: 1400px; margin: 0 auto; padding: 48px 40px; display: flex; flex-direction: column; }
+.back-link { display: inline-block; margin-bottom: 24px; font-size: 13px; color: #888888; }
+.back-link:hover { color: #111111; }
+.project-detail-header { max-width: 640px; margin-bottom: 40px; }
+.project-detail-header h1 { font-family: Helvetica, Arial, sans-serif; font-weight: 400; font-size: 24px; margin-bottom: 4px; }
+.project-detail-date { font-size: 12px; color: #A8A4A0; margin-bottom: 16px; }
+.project-detail-description { font-size: 14px; line-height: 1.8; color: #333333; }
+.project-detail-description a { text-decoration: underline; text-underline-offset: 2px; }
+.project-detail-description a:hover { color: #888888; }
+.project-photo-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; margin-bottom: 64px; }
+.project-photo { width: 100%; background-color: #D8D4CF; overflow: hidden; }
+.project-photo img { width: 100%; height: auto; display: block; }
+.book-section { border-top: 1px solid #E8E5E0; padding-top: 48px; }
+.book-heading { font-family: Helvetica, Arial, sans-serif; font-weight: 400; font-size: 18px; margin-bottom: 8px; }
+.book-sub { font-size: 13px; color: #888888; margin-bottom: 32px; max-width: 480px; }
+.book-container { max-width: 500px; margin: 0 auto; }
+.book-controls { display: flex; align-items: center; justify-content: center; gap: 20px; margin-top: 24px; }
+.book-controls button { background: none; border: 1px solid #E8E5E0; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; font-size: 14px; color: #111111; }
+.book-controls button:hover { background-color: #E8E5E0; }
+.book-page-indicator { font-size: 12px; color: #888888; min-width: 50px; text-align: center; }
+footer { width: 100%; border-top: 1px solid #E8E5E0; font-size: 12px; color: #888888; }
+.footer-inner { max-width: 1400px; margin: 0 auto; padding: 32px 40px; }
+.footer-bottom { display: flex; justify-content: space-between; align-items: center; }
+.newsletter { padding-bottom: 24px; margin-bottom: 24px; border-bottom: 1px solid #E8E5E0; }
+.newsletter-heading { font-size: 13px; margin-bottom: 12px; color: #111111; }
+.newsletter-form { display: flex; gap: 8px; max-width: 360px; }
+.newsletter-input { flex: 1; padding: 10px 12px; border: 1px solid #E8E5E0; background: transparent; font-family: 'Realtime Stencil', sans-serif; font-size: 13px; color: #111111; }
+.newsletter-input::placeholder { color: #A8A4A0; }
+.newsletter-submit { padding: 10px 20px; background-color: #111111; color: #F1F0EF; border: none; font-family: 'Realtime Stencil', sans-serif; font-size: 13px; cursor: pointer; }
+.newsletter-submit:hover { background-color: #333333; }
+.newsletter-success { font-size: 13px; color: #888888; margin-top: 8px; }
+.newsletter-overlay { position: fixed; inset: 0; background: rgba(17,17,17,0.3); opacity: 0; visibility: hidden; transition: opacity 0.2s ease, visibility 0.2s ease; z-index: 400; }
+.newsletter-overlay.active { opacity: 1; visibility: visible; }
+.newsletter-modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -48%); width: 400px; max-width: 90%; background: #F1F0EF; border: 1px solid #E8E5E0; padding: 32px; z-index: 401; opacity: 0; visibility: hidden; transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease; }
+.newsletter-modal.active { opacity: 1; visibility: visible; transform: translate(-50%, -50%); }
+.newsletter-modal-close { position: absolute; top: 16px; right: 16px; background: none; border: none; font-size: 20px; cursor: pointer; color: #111111; line-height: 1; }
+.newsletter-modal-heading { font-family: Helvetica, Arial, sans-serif; font-size: 16px; margin-bottom: 8px; padding-right: 24px; }
+.newsletter-modal-sub { font-size: 13px; color: #888888; margin-bottom: 20px; }
+.footer-left, .footer-center, .footer-right { flex: 1; }
+.footer-center { text-align: center; }
+.footer-right { text-align: right; display: flex; justify-content: flex-end; gap: 16px; }
+.footer-right svg { width: 18px; height: 18px; }
+@media (max-width: 900px) {
+  .topnav .nav-links { display: none; }
+  .hamburger { display: block; }
+  .mobile-nav { display: flex; }
+  .main-content { padding: 32px 20px; }
+  .project-photo-grid { grid-template-columns: 1fr; }
+  .footer-inner { padding: 32px 20px; }
+  .footer-bottom { flex-direction: column; gap: 16px; text-align: center; }
+  .newsletter { text-align: center; }
+  .newsletter-form { flex-direction: column; max-width: 100%; }
+  .footer-left, .footer-center, .footer-right { text-align: center; justify-content: center; }
+}
+</style>
+</head>
+<body>
+<div class="site-wrapper">
+  <div class="construction-bar">This site is under construction.</div>
+  <header class="topnav">
+    <div class="topnav-inner">
+      <a href="index.html" class="logo">ODS</a>
+      <nav class="nav-links">
+        <a href="products.html">Products</a>
+        <a href="projects.html" class="active">Projects</a>
+        <a href="about.html">About</a>
+        <a href="press.html">Press</a>
+      </nav>
+      <button class="cart-toggle" id="cart-toggle" aria-label="Open cart" style="display:none;">Cart <span class="cart-count" id="cart-count">0</span></button>
+      <button class="hamburger" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+    </div>
+  </header>
+  <nav class="mobile-nav">
+    <a href="products.html">Products</a>
+    <a href="projects.html">Projects</a>
+    <a href="about.html">About</a>
+    <a href="press.html">Press</a>
+  </nav>
+  <div class="cart-overlay" id="cart-overlay"></div>
+  <aside class="cart-drawer" id="cart-drawer">
+    <div class="cart-drawer-header">
+      <span>Cart</span>
+      <button class="cart-close" id="cart-close" aria-label="Close cart">&times;</button>
+    </div>
+    <div class="cart-items" id="cart-items"></div>
+    <div class="cart-footer">
+      <div class="cart-subtotal"><span>Subtotal</span><span id="cart-subtotal">$0 CAD</span></div>
+      <button class="cart-checkout-btn" id="cart-checkout-btn">Checkout</button>
+    </div>
+  </aside>
+  <div class="newsletter-overlay" id="newsletter-overlay"></div>
+  <div class="newsletter-modal" id="newsletter-modal">
+    <button class="newsletter-modal-close" id="newsletter-modal-close" aria-label="Close">&times;</button>
+    <p class="newsletter-modal-heading">Stay up to date with the studio.</p>
+    <p class="newsletter-modal-sub">New releases, studio updates, and early access, straight to your inbox.</p>
+    <form class="newsletter-form" id="newsletter-modal-form">
+      <input type="email" class="newsletter-input" id="newsletter-modal-input" placeholder="Email" required>
+      <button type="submit" class="newsletter-submit">Sign up</button>
+    </form>
+    <p class="newsletter-success" id="newsletter-modal-success" style="display:none;">Thanks, you're on the list.</p>
+  </div>
+  <main class="main-content">
+    <a href="projects.html" class="back-link">&larr; Back to Projects</a>
+    <div class="project-detail-header">
+      <h1>Open Studio</h1>
+      <div class="project-detail-date">January 2025 &middot; Toronto, Ontario</div>
+      <p class="project-detail-description">Open Studio was a design show sharing the process behind finished work. Exhibitors included Devansh Shah, <a href="https://hanmade.kr" target="_blank" rel="noopener">Peter Han</a>, and <a href="https://adamfuhrer.com" target="_blank" rel="noopener">Adam Fuhrer</a>. A take-away mini book was also produced for the show, walking through the development process behind the Pearl Lamp. Flip through it below.</p>
+    </div>
+    <div class="project-photo-grid">
+      <div class="project-photo"><img src="images/open-studio/web-20250124-DSC03811.jpg" alt="Open Studio, January 2025"></div>
+      <div class="project-photo"><img src="images/open-studio/web-20250124-DSC03813.jpg" alt="Open Studio exhibit"></div>
+      <div class="project-photo"><img src="images/open-studio/web-20250124-DSC03830.jpg" alt="Open Studio exhibit"></div>
+      <div class="project-photo"><img src="images/open-studio/web-20250124-DSC03841.jpg" alt="Open Studio exhibit"></div>
+      <div class="project-photo"><img src="images/open-studio/web-20250125-DSC03893.jpg" alt="Open Studio exhibit"></div>
+      <div class="project-photo"><img src="images/open-studio/web-20250125-DSC03895.jpg" alt="Open Studio exhibit"></div>
+      <div class="project-photo"><img src="images/open-studio/web-20250125-DSC03903.jpg" alt="Visitors flipping through the Open Studio mini book"></div>
+      <div class="project-photo"><img src="images/open-studio/web-20250125-DSC03906.jpg" alt="Open Studio worktable with sculptural forms and prototypes"></div>
+      <div class="project-photo"><img src="images/open-studio/web-20250125-DSC03912.jpg" alt="Overhead view of Open Studio figurine parts laid out on a worktable"></div>
+      <div class="project-photo"><img src="images/open-studio/web-20250125-DSC03915.jpg" alt="Wall of prints at Open Studio"></div>
+      <div class="project-photo"><img src="images/open-studio/web-20250125-DSC03919.jpg" alt="Visitors at Open Studio"></div>
+    </div>
+    <div class="book-section">
+      <h2 class="book-heading">Open Studio Mini Book</h2>
+      <p class="book-sub">The take-away book from the show, tracing the development of the Pearl Lamp. Click a page corner or use the arrows to turn the page.</p>
+      <div id="book-container" class="book-container"></div>
+      <div class="book-controls">
+        <button id="book-prev" aria-label="Previous page">&larr;</button>
+        <span class="book-page-indicator" id="book-page-indicator"></span>
+        <button id="book-next" aria-label="Next page">&rarr;</button>
+      </div>
+    </div>
+  </main>
+  <footer>
+    <div class="footer-inner">
+      <div class="newsletter">
+        <p class="newsletter-heading">Stay up to date with the studio.</p>
+        <form class="newsletter-form" id="newsletter-form">
+          <input type="email" class="newsletter-input" id="newsletter-input" placeholder="Email" required>
+          <button type="submit" class="newsletter-submit">Sign up</button>
+        </form>
+        <p class="newsletter-success" id="newsletter-success" style="display:none;">Thanks, you're on the list.</p>
+      </div>
+      <div class="footer-bottom">
+      <div class="footer-left">devansh.ca</div>
+      <div class="footer-center">Toronto, Ontario</div>
+      <div class="footer-right">
+        <a href="https://instagram.com/devanshcshah" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+        <a href="https://www.are.na/devansh-shah/" target="_blank" rel="noopener" aria-label="Are.na"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 4h6v6H4V4zm10 0h6v6h-6V4zM4 14h6v6H4v-6zm10 0h6v6h-6v-6z"/></svg></a>
+      </div>
+      </div>
+    </div>
+  </footer>
+</div>
+<script src="shopify-cart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/page-flip@2/dist/js/page-flip.browser.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var hamburger = document.querySelector('.hamburger');
+  var mobileNav = document.querySelector('.mobile-nav');
+  hamburger.addEventListener('click', function() {
+    hamburger.classList.toggle('active');
+    mobileNav.classList.toggle('active');
+  });
+  var NEWSLETTER_KEY = 'ods_newsletter_seen';
+  function subscribeNewsletter(formId, inputId, successId) {
+    var formEl = document.getElementById(formId);
+    var inputEl = document.getElementById(inputId);
+    var successEl = document.getElementById(successId);
+    var email = inputEl ? inputEl.value : '';
+    if (!email || !window.subscribeToNewsletter) return;
+    var submitBtn = formEl.querySelector('button[type="submit"]');
+    if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Signing up...'; }
+    window.subscribeToNewsletter(email).then(function(result) {
+      if (result && result.ok) {
+        formEl.style.display = 'none';
+        successEl.style.display = 'block';
+        localStorage.setItem(NEWSLETTER_KEY, '1');
+      } else {
+        if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Sign up'; }
+        alert('Could not sign up right now. Please try again in a moment.');
+      }
+    });
+  }
+  var footerNewsletterForm = document.getElementById('newsletter-form');
+  if (footerNewsletterForm) {
+    footerNewsletterForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      subscribeNewsletter('newsletter-form', 'newsletter-input', 'newsletter-success');
+    });
+  }
+  var newsletterOverlay = document.getElementById('newsletter-overlay');
+  var newsletterModal = document.getElementById('newsletter-modal');
+  var newsletterModalForm = document.getElementById('newsletter-modal-form');
+  var newsletterModalClose = document.getElementById('newsletter-modal-close');
+  function openNewsletterModal() {
+    newsletterModal.classList.add('active');
+    newsletterOverlay.classList.add('active');
+  }
+  function closeNewsletterModal() {
+    newsletterModal.classList.remove('active');
+    newsletterOverlay.classList.remove('active');
+    localStorage.setItem(NEWSLETTER_KEY, '1');
+  }
+  if (newsletterModal && !localStorage.getItem(NEWSLETTER_KEY)) {
+    setTimeout(openNewsletterModal, 1200);
+  }
+  if (newsletterModalClose) { newsletterModalClose.addEventListener('click', closeNewsletterModal); }
+  if (newsletterOverlay) { newsletterOverlay.addEventListener('click', closeNewsletterModal); }
+  if (newsletterModalForm) {
+    newsletterModalForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      subscribeNewsletter('newsletter-modal-form', 'newsletter-modal-input', 'newsletter-modal-success');
+    });
+  }
+
+  if (window.St && document.getElementById('book-container')) {
+    var pageCount = 60;
+    var images = [];
+    for (var i = 1; i <= pageCount; i++) {
+      var num = i < 10 ? '0' + i : '' + i;
+      images.push('images/open-studio-book/page-' + num + '.jpg');
+    }
+    var pageFlip = new St.PageFlip(document.getElementById('book-container'), {
+      width: 400,
+      height: 565,
+      size: 'stretch',
+      minWidth: 240,
+      maxWidth: 500,
+      minHeight: 338,
+      maxHeight: 705,
+      showCover: true,
+      usePortrait: true,
+      mobileScrollSupport: true,
+      maxShadowOpacity: 0.5
+    });
+    pageFlip.loadFromImages(images);
+    var indicator = document.getElementById('book-page-indicator');
+    function updateIndicator() {
+      indicator.textContent = (pageFlip.getCurrentPageIndex() + 1) + ' / ' + pageFlip.getPageCount();
+    }
+    pageFlip.on('flip', updateIndicator);
+    updateIndicator();
+    document.getElementById('book-prev').addEventListener('click', function() { pageFlip.flipPrev(); });
+    document.getElementById('book-next').addEventListener('click', function() { pageFlip.flipNext(); });
+  }
+});
+</script>
+</body>
+</html>
