@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Products | Devansh Shah</title>
+<title>Touch Point Sconce, Pre-order | Devansh Shah</title>
+<meta name="description" content="Touch Point Sconce. A wall sconce you turn on by docking a magnetic puck. Pre-order now, shipping starts early November.">
 <style>
 @font-face { font-family: 'Realtime Stencil'; src: url('https://devansh.ca/fonts/RealtimeStencilRounded-Semibold.otf') format('opentype'); font-weight: 600; font-style: normal; font-display: swap; }
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -48,17 +49,40 @@ ul { list-style: none; }
 .mobile-nav.active { opacity: 1; visibility: visible; }
 .mobile-nav a { font-size: 24px; }
 .main-content { flex: 1; width: 100%; max-width: 1400px; margin: 0 auto; padding: 48px 40px; display: flex; flex-direction: column; }
-.page-title { font-family: Helvetica, Arial, sans-serif; font-weight: 400; font-size: 20px; margin-bottom: 32px; }
-.products-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-.product-item { display: block; }
-.product-thumb { position: relative; width: 100%; padding-bottom: 100%; background-color: #D8D4CF; overflow: hidden; margin-bottom: 10px; }
-.product-thumb img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease; }
-.product-item:hover .product-thumb img { transform: scale(1.02); }
-.product-name { font-size: 13px; }
-.product-item.coming-soon { cursor: default; }
-.product-item.coming-soon .product-thumb img { filter: grayscale(1); opacity: 0.5; }
-.product-item.coming-soon .product-name { color: #A8A4A0; }
-.coming-soon-caption { font-size: 11px; color: #A8A4A0; }
+.back-link { display: inline-block; margin-bottom: 24px; font-size: 13px; color: #888888; }
+.back-link:hover { color: #111111; }
+.product-layout { display: grid; grid-template-columns: 1.2fr 1fr; gap: 60px; align-items: start; }
+.product-gallery { display: flex; flex-direction: column; gap: 16px; }
+.product-image { position: relative; width: 100%; padding-bottom: 100%; background-color: #D8D4CF; overflow: hidden; }
+.product-image img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
+.gallery-dots { display: none; justify-content: center; gap: 8px; margin-top: 12px; }
+.gallery-dot { width: 6px; height: 6px; border-radius: 50%; background: #C9C5BE; border: none; cursor: pointer; padding: 0; }
+.gallery-dot.active { background: #111111; }
+.product-image.placeholder span { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #A8A4A0; font-size: 12px; text-align: center; padding: 10px; }
+.product-info { position: sticky; top: 100px; }
+.product-info h1 { font-family: Helvetica, Arial, sans-serif; font-size: 24px; font-weight: 400; margin-bottom: 12px; }
+.product-price { font-size: 16px; margin-bottom: 4px; }
+.price-note { font-size: 12px; color: #A8A4A0; margin-bottom: 20px; }
+.product-description { max-width: 480px; margin-bottom: 16px; line-height: 1.8; }
+.product-description p { margin-bottom: 12px; }
+.product-description p:last-child { margin-bottom: 0; }
+.product-meta { color: #888888; font-size: 13px; line-height: 1.6; margin-bottom: 24px; }
+.product-meta p { margin-bottom: 4px; }
+.buy-button { display: inline-block; margin-top: 8px; padding: 12px 28px; background-color: #111111; color: #F1F0EF; font-family: 'Realtime Stencil', sans-serif; font-size: 13px; border: none; cursor: pointer; }
+.buy-button:hover { background-color: #333333; }
+.preorder-tag { display: inline-block; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; border: 1px solid #111111; padding: 2px 8px; margin-bottom: 14px; }
+.ship-note { font-size: 13px; margin-bottom: 20px; }
+.preorder-fine { font-size: 12px; color: #888888; margin-top: 12px; max-width: 420px; line-height: 1.6; }
+.follow-link { display: inline-block; margin-top: 16px; font-size: 13px; text-decoration: underline; text-underline-offset: 3px; }
+.faq { margin-top: 36px; max-width: 480px; }
+.faq h2 { font-family: Helvetica, Arial, sans-serif; font-size: 15px; font-weight: 400; margin-bottom: 12px; }
+.faq details { border-top: 1px solid #E8E5E0; padding: 12px 0; }
+.faq details:last-child { border-bottom: 1px solid #E8E5E0; }
+.faq summary { cursor: pointer; list-style: none; font-size: 13px; }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after { content: '+'; float: right; color: #888888; }
+.faq details[open] summary::after { content: '\2013'; }
+.faq details p { font-size: 13px; color: #555555; margin-top: 8px; }
 footer { width: 100%; border-top: 1px solid #E8E5E0; font-size: 12px; color: #888888; }
 .footer-inner { max-width: 1400px; margin: 0 auto; padding: 32px 40px; }
 .footer-bottom { display: flex; justify-content: space-between; align-items: center; }
@@ -86,7 +110,12 @@ footer { width: 100%; border-top: 1px solid #E8E5E0; font-size: 12px; color: #88
   .hamburger { display: block; }
   .mobile-nav { display: flex; }
   .main-content { padding: 32px 20px; }
-  .products-grid { grid-template-columns: repeat(2, 1fr); }
+  .product-layout { grid-template-columns: 1fr; }
+  .product-info { position: static; }
+  .product-gallery { flex-direction: row; overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; gap: 0; scrollbar-width: none; }
+  .product-gallery::-webkit-scrollbar { display: none; }
+  .product-image { flex: 0 0 100%; scroll-snap-align: start; }
+  .gallery-dots { display: flex; }
   .footer-inner { padding: 32px 20px; }
   .footer-bottom { flex-direction: column; gap: 16px; text-align: center; }
   .newsletter { text-align: center; }
@@ -140,17 +169,41 @@ footer { width: 100%; border-top: 1px solid #E8E5E0; font-size: 12px; color: #88
     <p class="newsletter-success" id="newsletter-modal-success" style="display:none;">Thanks, you're on the list.</p>
   </div>
   <main class="main-content">
-    <h1 class="page-title">Products</h1>
-    <div class="products-grid">
-      <a href="product-pearl-lamp.html" class="product-item">
-        <div class="product-thumb"><img src="https://shop.devansh.ca/cdn/shop/files/L1003952.jpg" alt="Pearl Lamp"></div>
-        <div class="product-name">Pearl Lamp</div>
-      </a>
-      <a href="product-touch-point-sconce.html" class="product-item">
-        <div class="product-thumb"><img src="https://devansh.ca/images/touch-point-sconce/cover.png" alt="Touch Point Sconce"></div>
-        <div class="product-name">Touch Point Sconce</div>
-        <div class="coming-soon-caption">Pre-order &middot; shipping early November</div>
-      </a>
+    <a href="products.html" class="back-link">&larr; Back to Products</a>
+    <div class="product-layout">
+      <div class="product-gallery">
+        <div class="product-image"><img src="images/touch-point-sconce/animation.gif" alt="Touch Point Sconce: the light rises as the puck is docked"></div>
+        <div class="product-image"><img src="images/touch-point-sconce/cover.png" alt="Touch Point Sconce with its magnetic puck on a yellow paracord tether"></div>
+      </div>
+      <div class="gallery-dots" id="gallery-dots"></div>
+      <div class="product-info">
+        <span class="preorder-tag">Pre-order</span>
+        <h1>Touch Point Sconce</h1>
+        <div class="product-price">$300 CAD</div>
+        <div class="ship-note">We start shipping early November.</div>
+        <div class="product-description">
+          <p>A handshake, a hug, the tap of a shoulder. Touch Point is a sconce built around those small moments of contact.</p>
+          <p>A magnetic puck, tethered by a yellow paracord, is the switch. Bring it close and the light rises gradually. Dock it and the light holds at full brightness. Pull it away and it fades out.</p>
+          <p>We're finishing the last details of design and production in our Toronto studio now. Pre-order now and yours will be among the first to ship.</p>
+        </div>
+        <div class="product-meta">
+          <p>Dimensions: 10" (254mm) diameter.</p>
+          <p>Materials: 3D-printed body, acrylic diffuser, LED, nylon paracord, magnetic puck.</p>
+          <p>Power: plug-in 5V adapter, included.</p>
+          <p>Designed with <a href="http://markkhourydesign.com" target="_blank" rel="noopener" style="text-decoration:underline;text-underline-offset:2px;">Mark Khoury</a>.</p>
+        </div>
+        <button class="buy-button" id="add-to-cart-btn">Pre-order &mdash; $300</button>
+        <p class="preorder-fine">You're ordering before it's finished, so we'll email you as we build. If anything moves your ship date, you'll hear from us first and can choose to wait or get a full refund.</p>
+        <a href="https://instagram.com/devanshcshah" target="_blank" rel="noopener" class="follow-link">Want to watch first? Follow along on Instagram</a>
+        <div class="faq">
+          <h2>FAQ</h2>
+          <details><summary>Why pre-order?</summary><p>We make Touch Point in small batches rather than holding warehouse stock. Pre-orders tell us how many to build in each batch.</p></details>
+          <details><summary>When will mine ship?</summary><p>We start shipping in early November. Orders go out in the sequence they were placed, and we'll email you when yours is on its way.</p></details>
+          <details><summary>Will it arrive before the holidays?</summary><p>Yes. Orders placed now will arrive well before the holidays.</p></details>
+          <details><summary>Where do you ship?</summary><p>Canada for now, with US shipping coming soon. Shipping is calculated at checkout, and free local pickup is available in Toronto.</p></details>
+          <details><summary>Can I cancel?</summary><p>Yes. Email us any time before your sconce ships for a full refund.</p></details>
+        </div>
+      </div>
     </div>
   </main>
   <footer>
@@ -234,6 +287,29 @@ document.addEventListener('DOMContentLoaded', function() {
       subscribeNewsletter('newsletter-modal-form', 'newsletter-modal-input', 'newsletter-modal-success');
     });
   }
+  var addToCartBtn = document.getElementById('add-to-cart-btn');
+  if (addToCartBtn) {
+    addToCartBtn.addEventListener('click', function() {
+      addToCart({ id: 'gid://shopify/ProductVariant/54518633333049', name: 'Touch Point Sconce (Pre-order)', price: 300, image: 'https://devansh.ca/images/touch-point-sconce/cover.png' });
+    });
+  }
+  var gallery = document.querySelector('.product-gallery');
+  var galleryImages = gallery.querySelectorAll('.product-image');
+  var dotsWrap = document.getElementById('gallery-dots');
+  galleryImages.forEach(function(img, i) {
+    var dot = document.createElement('button');
+    dot.className = 'gallery-dot' + (i === 0 ? ' active' : '');
+    dot.setAttribute('aria-label', 'Go to photo ' + (i + 1));
+    dot.addEventListener('click', function() {
+      gallery.scrollTo({ left: img.offsetLeft, behavior: 'smooth' });
+    });
+    dotsWrap.appendChild(dot);
+  });
+  var galleryDots = dotsWrap.querySelectorAll('.gallery-dot');
+  gallery.addEventListener('scroll', function() {
+    var index = Math.round(gallery.scrollLeft / gallery.clientWidth);
+    galleryDots.forEach(function(d, i) { d.classList.toggle('active', i === index); });
+  });
 });
 </script>
 </body>
