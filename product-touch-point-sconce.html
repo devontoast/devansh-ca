@@ -83,6 +83,7 @@ ul { list-style: none; }
 .faq details[open] summary::after { content: '\2013'; }
 .faq details p { font-size: 13px; color: #555555; margin-top: 8px; }
 .price-sub { font-size: 12px; color: #888888; margin: 0 0 6px; }
+.price-incl { font-size: 12px; color: #888888; }
 .ship-change { background: none; border: none; padding: 0; font: inherit; color: #888888; text-decoration: underline; text-underline-offset: 2px; cursor: pointer; }
 .ship-change:hover { color: #111111; }
 .buy-block { margin: 4px 0 28px; }
@@ -186,7 +187,7 @@ footer { width: 100%; border-top: 1px solid #E8E5E0; font-size: 12px; color: #88
         <span class="preorder-tag">Pre-order</span>
         <h1>Touch Point Sconce</h1>
         <div class="product-price" id="tp-price">$300 CAD</div>
-        <div class="price-sub"><span id="tp-price-sub">Shipping to Canada.</span> <button type="button" class="ship-change" id="ship-change">Change</button></div>
+        <div class="price-sub"><button type="button" class="ship-change" id="ship-change">Ship to the US instead</button></div>
         <div class="ship-note">Shipping starts early November.</div>
         <div class="buy-block">
           <button class="buy-button" id="add-to-cart-btn">Pre-order &mdash; $300 CAD</button>
@@ -299,8 +300,7 @@ document.addEventListener('DOMContentLoaded', function() {
   };
   function applyCountry(cc) {
     var p = PRICES[cc] || PRICES.CA;
-    document.getElementById('tp-price').textContent = p.label;
-    document.getElementById('tp-price-sub').textContent = cc === 'US' ? 'Shipping to the US. Includes all duties and import fees.' : 'Shipping to Canada.';
+    document.getElementById('tp-price').innerHTML = p.label + (cc === 'US' ? ' <span class="price-incl">(includes duties and import fees)</span>' : '');
     var ch = document.getElementById('ship-change'); if (ch) ch.textContent = cc === 'US' ? 'Ship to Canada instead' : 'Ship to the US instead';
     var b = document.getElementById('add-to-cart-btn'); if (b) b.textContent = p.button;
   }
