@@ -178,9 +178,9 @@ footer { width: 100%; border-top: 1px solid #E8E5E0; font-size: 12px; color: #88
     <a href="products.html" class="back-link">&larr; Back to Products</a>
     <div class="product-layout">
       <div class="product-gallery">
-        <div class="product-image"><video src="images/touch-point-sconce/clip-cycle.mp4" poster="images/touch-point-sconce/clip-cycle-poster.jpg" autoplay muted loop playsinline preload="metadata" aria-label="Docking the puck: the light rises, holds, and fades out when the puck is pulled away"></video></div>
+        <div class="product-image"><video src="images/touch-point-sconce/clip-cycle.mp4" poster="images/touch-point-sconce/clip-cycle-poster.jpg" autoplay muted loop playsinline preload="auto" aria-label="Docking the puck: the light rises, holds, and fades out when the puck is pulled away"></video></div>
         <div class="product-image"><img src="images/touch-point-sconce/cover.png" alt="Touch Point Sconce with its magnetic puck on a yellow paracord tether"></div>
-        <div class="product-image"><video src="images/touch-point-sconce/clip-close.mp4" poster="images/touch-point-sconce/clip-close-poster.jpg" autoplay muted loop playsinline preload="metadata" aria-label="Close-up of the puck docking and the light coming on"></video></div>
+        <div class="product-image"><video src="images/touch-point-sconce/clip-close.mp4" poster="images/touch-point-sconce/clip-close-poster.jpg" autoplay muted loop playsinline preload="auto" aria-label="Close-up of the puck docking and the light coming on"></video></div>
       </div>
       <div class="gallery-dots" id="gallery-dots"></div>
       <div class="product-info">
@@ -335,6 +335,25 @@ document.addEventListener('DOMContentLoaded', function() {
     galleryDots.forEach(function(d, i) { d.classList.toggle('active', i === index); });
   });
 });
+</script>
+<script>
+// Make sure muted loop videos actually play: start on load, resume when
+// scrolled into view, and retry on first tap (iOS Low Power Mode blocks autoplay).
+(function () {
+  var vids = [].slice.call(document.querySelectorAll('video[autoplay]'));
+  if (!vids.length) return;
+  function play(v) { v.muted = true; v.playsInline = true; var p = v.play(); if (p && p.catch) p.catch(function () {}); }
+  vids.forEach(play);
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { if (e.isIntersecting && e.target.paused) play(e.target); });
+    }, { threshold: 0.1 });
+    vids.forEach(function (v) { io.observe(v); });
+  }
+  function kick() { vids.forEach(function (v) { if (v.paused) play(v); }); }
+  ['touchstart', 'click', 'scroll'].forEach(function (ev) { window.addEventListener(ev, kick, { once: true, passive: true }); });
+  document.addEventListener('visibilitychange', function () { if (!document.hidden) kick(); });
+})();
 </script>
 </body>
 </html>
