@@ -82,6 +82,9 @@ ul { list-style: none; }
 .faq summary::after { content: '+'; float: right; color: #888888; }
 .faq details[open] summary::after { content: '\2013'; }
 .faq details p { font-size: 13px; color: #555555; margin-top: 8px; }
+.buy-block { margin: 4px 0 28px; }
+.buy-block .buy-button { margin-top: 0; }
+.product-price + .buy-block { margin-top: 20px; }
 footer { width: 100%; border-top: 1px solid #E8E5E0; font-size: 12px; color: #888888; }
 .footer-inner { max-width: 1400px; margin: 0 auto; padding: 32px 40px; }
 .footer-bottom { display: flex; justify-content: space-between; align-items: center; }
@@ -181,6 +184,10 @@ footer { width: 100%; border-top: 1px solid #E8E5E0; font-size: 12px; color: #88
         <h1>Touch Point Sconce</h1>
         <div class="product-price">$300 CAD</div>
         <div class="ship-note">Shipping starts early November.</div>
+        <div class="buy-block">
+          <button class="buy-button" id="add-to-cart-btn">Pre-order &mdash; $300</button>
+          <a href="https://instagram.com/devanshcshah" target="_blank" rel="noopener" class="follow-link">Want to watch first? Follow along on Instagram</a>
+        </div>
         <div class="product-description">
           <p>A handshake, a hug, the tap of a shoulder. Touch Point is a sconce built around those small moments of contact.</p>
           <p>A magnetic puck, tethered by a yellow paracord, is the switch. Bring it close and the light rises gradually. Dock it and the light holds at full brightness. Pull it away and it fades out.</p>
@@ -191,8 +198,6 @@ footer { width: 100%; border-top: 1px solid #E8E5E0; font-size: 12px; color: #88
           <p>Power: plug-in 5V adapter, included.</p>
           <p>Designed with <a href="https://www.instagram.com/markkhourydesign" target="_blank" rel="noopener" style="text-decoration:underline;text-underline-offset:2px;">Mark Khoury</a>.</p>
         </div>
-        <button class="buy-button" id="add-to-cart-btn">Pre-order &mdash; $300</button>
-        <a href="https://instagram.com/devanshcshah" target="_blank" rel="noopener" class="follow-link">Want to watch first? Follow along on Instagram</a>
         <div class="faq">
           <h2>FAQ</h2>
           <details><summary>When will mine ship?</summary><p>Shipping starts in early November. Orders go out in the sequence they were placed, and we'll email you when yours is on its way.</p></details>

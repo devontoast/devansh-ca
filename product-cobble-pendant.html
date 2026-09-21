@@ -67,6 +67,9 @@ ul { list-style: none; }
 .product-meta p { margin-bottom: 4px; }
 .buy-button { display: inline-block; margin-top: 8px; padding: 12px 28px; background-color: #111111; color: #F1F0EF; font-family: 'Realtime Stencil', sans-serif; font-size: 13px; border: none; cursor: pointer; }
 .buy-button:hover { background-color: #333333; }
+.buy-block { margin: 4px 0 28px; }
+.buy-block .buy-button { margin-top: 0; }
+.product-price + .buy-block { margin-top: 20px; }
 footer { width: 100%; border-top: 1px solid #E8E5E0; font-size: 12px; color: #888888; }
 .footer-inner { max-width: 1400px; margin: 0 auto; padding: 32px 40px; }
 .footer-bottom { display: flex; justify-content: space-between; align-items: center; }
@@ -164,6 +167,9 @@ footer { width: 100%; border-top: 1px solid #E8E5E0; font-size: 12px; color: #88
         <h1>Cobble Pendant</h1>
         <div class="product-price">$440 CAD</div>
         <div class="price-note">One size</div>
+        <div class="buy-block">
+          <button class="buy-button" id="add-to-cart-btn">Add to cart</button>
+        </div>
         <p class="product-description">The Cobble Pendant references natural worn down river stones, with its bulbous shape and organic contour lines. Designed to be used as a single pendant or in clusters at various heights.</p>
         <div class="product-meta">
           <p>Dimensions: 250mm diameter, 250mm height.</p>
@@ -171,7 +177,6 @@ footer { width: 100%; border-top: 1px solid #E8E5E0; font-size: 12px; color: #88
           <p>Bulb: E26, 3000K, dimmable, included.</p>
           <p>Made to order, ships in 4 weeks.</p>
         </div>
-        <button class="buy-button" id="add-to-cart-btn">Add to cart</button>
       </div>
     </div>
   </main>
