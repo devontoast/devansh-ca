@@ -54,7 +54,7 @@ ul { list-style: none; }
 .product-layout { display: grid; grid-template-columns: 1.2fr 1fr; gap: 60px; align-items: start; }
 .product-gallery { display: flex; flex-direction: column; gap: 16px; }
 .product-image { position: relative; width: 100%; padding-bottom: 100%; background-color: #D8D4CF; overflow: hidden; }
-.product-image img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
+.product-image img, .product-image video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
 .gallery-dots { display: none; justify-content: center; gap: 8px; margin-top: 12px; }
 .gallery-dot { width: 6px; height: 6px; border-radius: 50%; background: #C9C5BE; border: none; cursor: pointer; padding: 0; }
 .gallery-dot.active { background: #111111; }
@@ -72,7 +72,7 @@ ul { list-style: none; }
 .buy-button:hover { background-color: #333333; }
 .preorder-tag { display: inline-block; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; border: 1px solid #111111; padding: 2px 8px; margin-bottom: 14px; }
 .ship-note { font-size: 13px; margin-bottom: 20px; }
-.follow-link { display: inline-block; margin-top: 16px; font-size: 13px; text-decoration: underline; text-underline-offset: 3px; }
+.follow-link { display: table; margin-top: 16px; font-size: 13px; text-decoration: underline; text-underline-offset: 3px; }
 .faq { margin-top: 36px; max-width: 480px; }
 .faq h2 { font-family: Helvetica, Arial, sans-serif; font-size: 15px; font-weight: 400; margin-bottom: 12px; }
 .faq details { border-top: 1px solid #E8E5E0; padding: 12px 0; }
@@ -171,8 +171,9 @@ footer { width: 100%; border-top: 1px solid #E8E5E0; font-size: 12px; color: #88
     <a href="products.html" class="back-link">&larr; Back to Products</a>
     <div class="product-layout">
       <div class="product-gallery">
-        <div class="product-image"><img src="images/touch-point-sconce/animation.gif" alt="Touch Point Sconce: the light rises as the puck is docked"></div>
+        <div class="product-image"><video src="images/touch-point-sconce/clip-cycle.mp4" poster="images/touch-point-sconce/clip-cycle-poster.jpg" autoplay muted loop playsinline preload="metadata" aria-label="Docking the puck: the light rises, holds, and fades out when the puck is pulled away"></video></div>
         <div class="product-image"><img src="images/touch-point-sconce/cover.png" alt="Touch Point Sconce with its magnetic puck on a yellow paracord tether"></div>
+        <div class="product-image"><video src="images/touch-point-sconce/clip-close.mp4" poster="images/touch-point-sconce/clip-close-poster.jpg" autoplay muted loop playsinline preload="metadata" aria-label="Close-up of the puck docking and the light coming on"></video></div>
       </div>
       <div class="gallery-dots" id="gallery-dots"></div>
       <div class="product-info">
