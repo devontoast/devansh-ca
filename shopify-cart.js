@@ -30,9 +30,9 @@ var SHOPIFY_CONFIG = {
     }).then(function (res) { return res.json(); });
   }
 
-  var CART_FIELDS = 'id checkoutUrl totalQuantity ' +
+  var CART_FIELDS = 'id checkoutUrl totalQuantity buyerIdentity { countryCode } ' +
     'cost { subtotalAmount { amount currencyCode } } ' +
-    'lines(first: 50) { edges { node { id quantity merchandise { ... on ProductVariant { id title price { amount currencyCode } product { title featuredImage { url } } } } } } }';
+    'lines(first: 50) { edges { node { id quantity cost { totalAmount { amount currencyCode } } merchandise { ... on ProductVariant { id title price { amount currencyCode } product { title featuredImage { url } } } } } } }';
 
   function cartFromResponse(cartNode) {
     if (!cartNode) return null;
@@ -42,7 +42,7 @@ var SHOPIFY_CONFIG = {
         lineId: n.id,
         variantId: n.merchandise.id,
         name: n.merchandise.product.title,
-        price: parseFloat(n.merchandise.price.amount),
+        price: parseFloat(n.cost.totalAmount.amount) / (n.quantity || 1),
         image: n.merchandise.product.featuredImage ? n.merchandise.product.featuredImage.url : '',
         qty: n.quantity
       };
@@ -52,13 +52,14 @@ var SHOPIFY_CONFIG = {
       checkoutUrl: cartNode.checkoutUrl,
       lines: lines,
       subtotal: parseFloat(cartNode.cost.subtotalAmount.amount),
-      currencyCode: cartNode.cost.subtotalAmount.currencyCode
+      currencyCode: cartNode.cost.subtotalAmount.currencyCode,
+      countryCode: cartNode.buyerIdentity ? cartNode.buyerIdentity.countryCode : null
     };
   }
 
   function createCart(lines) {
     var query = 'mutation cartCreate($input: CartInput) { cartCreate(input: $input) { cart { ' + CART_FIELDS + ' } userErrors { field message } } }';
-    return storefrontFetch(query, { input: { lines: lines || [] } }).then(function (res) {
+    return storefrontFetch(query, { input: { lines: lines || [], buyerIdentity: { countryCode: getShipCountry() } } }).then(function (res) {
       var payload = res.data.cartCreate;
       if (payload.userErrors && payload.userErrors.length) {
         console.error('cartCreate errors', payload.userErrors);
@@ -68,6 +69,34 @@ var SHOPIFY_CONFIG = {
       return currentCart;
     });
   }
+
+  // Ship-to country (CA or US). Sets which Shopify market, currency and
+  // prices the cart uses. Stored per browser; defaults to Canada.
+  var COUNTRY_KEY = 'ods_ship_country';
+  // No stored choice: guess from the browser's time zone (no network call,
+  // no tracking). US zones -> US, everything else -> Canada.
+  function detectCountry() {
+    try {
+      var tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+      if (/^America\/(New_York|Chicago|Denver|Los_Angeles|Phoenix|Anchorage|Juneau|Sitka|Metlakatla|Nome|Yakutat|Adak|Boise|Detroit|Menominee|Indiana\/.+|Kentucky\/.+|North_Dakota\/.+)$/.test(tz) || /^Pacific\/Honolulu$/.test(tz) || /^US\//.test(tz)) return 'US';
+    } catch (e) {}
+    return 'CA';
+  }
+  function getShipCountry() {
+    try { var c = localStorage.getItem(COUNTRY_KEY); if (c === 'US' || c === 'CA') return c; } catch (e) {}
+    return detectCountry();
+  }
+  window.getShipCountry = getShipCountry;
+  window.setShipCountry = function (cc) {
+    try { localStorage.setItem(COUNTRY_KEY, cc); } catch (e) {}
+    if (!currentCart) return Promise.resolve(null);
+    var query = 'mutation cartBuyerIdentityUpdate($cartId: ID!, $buyerIdentity: CartBuyerIdentityInput!) { cartBuyerIdentityUpdate(cartId: $cartId, buyerIdentity: $buyerIdentity) { cart { ' + CART_FIELDS + ' } userErrors { field message } } }';
+    return storefrontFetch(query, { cartId: currentCart.id, buyerIdentity: { countryCode: cc } }).then(function (res) {
+      var payload = res.data && res.data.cartBuyerIdentityUpdate;
+      if (payload && payload.cart) { currentCart = cartFromResponse(payload.cart); renderCart(); }
+      return currentCart;
+    });
+  };
 
   function fetchCart(id) {
     var query = 'query cart($id: ID!) { cart(id: $id) { ' + CART_FIELDS + ' } }';
@@ -83,6 +112,7 @@ var SHOPIFY_CONFIG = {
     if (currentCart) return Promise.resolve(currentCart);
     if (existingId) {
       return fetchCart(existingId).then(function (cart) {
+        if (cart && cart.countryCode && cart.countryCode !== getShipCountry()) return window.setShipCountry(getShipCountry());
         if (cart) return cart;
         localStorage.removeItem(CART_ID_KEY);
         return createCart([]);
@@ -194,10 +224,10 @@ var SHOPIFY_CONFIG = {
       itemsWrap.innerHTML = '<p class="cart-empty">Your cart is empty.</p>';
     } else {
       itemsWrap.innerHTML = lines.map(function (item) {
-        return '<div class="cart-item"><div class="cart-item-image"><img src="' + item.image + '" alt="' + item.name + '"></div><div class="cart-item-info"><div class="cart-item-name">' + item.name + '</div><div class="cart-item-price">$' + item.price.toFixed(2) + ' CAD</div><div class="cart-item-controls"><button class="cart-qty-btn" data-action="dec" data-id="' + item.variantId + '">-</button><span>' + item.qty + '</span><button class="cart-qty-btn" data-action="inc" data-id="' + item.variantId + '">+</button><button class="cart-remove" data-action="remove" data-id="' + item.variantId + '">Remove</button></div></div></div>';
+        return '<div class="cart-item"><div class="cart-item-image"><img src="' + item.image + '" alt="' + item.name + '"></div><div class="cart-item-info"><div class="cart-item-name">' + item.name + '</div><div class="cart-item-price">$' + item.price.toFixed(2) + ' ' + currentCart.currencyCode + '</div><div class="cart-item-controls"><button class="cart-qty-btn" data-action="dec" data-id="' + item.variantId + '">-</button><span>' + item.qty + '</span><button class="cart-qty-btn" data-action="inc" data-id="' + item.variantId + '">+</button><button class="cart-remove" data-action="remove" data-id="' + item.variantId + '">Remove</button></div></div></div>';
       }).join('');
     }
-    subtotalEl.textContent = '$' + (currentCart ? currentCart.subtotal.toFixed(2) : '0.00') + ' CAD';
+    subtotalEl.textContent = '$' + (currentCart ? currentCart.subtotal.toFixed(2) : '0.00') + ' ' + (currentCart ? currentCart.currencyCode : 'CAD');
 
     itemsWrap.querySelectorAll('button[data-action]').forEach(function (btn) {
       btn.addEventListener('click', function () {

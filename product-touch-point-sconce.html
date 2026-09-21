@@ -82,6 +82,9 @@ ul { list-style: none; }
 .faq summary::after { content: '+'; float: right; color: #888888; }
 .faq details[open] summary::after { content: '\2013'; }
 .faq details p { font-size: 13px; color: #555555; margin-top: 8px; }
+.price-sub { font-size: 12px; color: #888888; margin: 0 0 6px; }
+.ship-change { background: none; border: none; padding: 0; font: inherit; color: #888888; text-decoration: underline; text-underline-offset: 2px; cursor: pointer; }
+.ship-change:hover { color: #111111; }
 .buy-block { margin: 4px 0 28px; }
 .buy-block .buy-button { margin-top: 0; }
 .product-price + .buy-block { margin-top: 20px; }
@@ -182,10 +185,11 @@ footer { width: 100%; border-top: 1px solid #E8E5E0; font-size: 12px; color: #88
       <div class="product-info">
         <span class="preorder-tag">Pre-order</span>
         <h1>Touch Point Sconce</h1>
-        <div class="product-price">$300 CAD</div>
+        <div class="product-price" id="tp-price">$300 CAD</div>
+        <div class="price-sub"><span id="tp-price-sub">Shipping to Canada.</span> <button type="button" class="ship-change" id="ship-change">Change</button></div>
         <div class="ship-note">Shipping starts early November.</div>
         <div class="buy-block">
-          <button class="buy-button" id="add-to-cart-btn">Pre-order &mdash; $300</button>
+          <button class="buy-button" id="add-to-cart-btn">Pre-order &mdash; $300 CAD</button>
           <a href="https://instagram.com/devanshcshah" target="_blank" rel="noopener" class="follow-link">Want to watch first? Follow along on Instagram</a>
         </div>
         <div class="product-description">
@@ -202,7 +206,7 @@ footer { width: 100%; border-top: 1px solid #E8E5E0; font-size: 12px; color: #88
           <h2>FAQ</h2>
           <details><summary>When will mine ship?</summary><p>Shipping starts in early November. Orders go out in the sequence they were placed, and we'll email you when yours is on its way.</p></details>
           <details><summary>Will it arrive before the holidays?</summary><p>Yes. Orders placed now will arrive well before the holidays.</p></details>
-          <details><summary>Where do you ship?</summary><p>Canada for now, with US shipping coming soon. Shipping is calculated at checkout, and free local pickup is available in Toronto using code TORONTO.</p></details>
+          <details><summary>Where do you ship?</summary><p>Canada and the United States. US prices include all duties and import fees, and US shipping is a flat $20 USD. In Canada, shipping is calculated at checkout, and free local pickup is available in Toronto using code TORONTO.</p></details>
           <details><summary>Can I cancel?</summary><p>Yes. Email us any time before your sconce ships for a full refund.</p></details>
         </div>
       </div>
@@ -289,10 +293,28 @@ document.addEventListener('DOMContentLoaded', function() {
       subscribeNewsletter('newsletter-modal-form', 'newsletter-modal-input', 'newsletter-modal-success');
     });
   }
+  var PRICES = {
+    CA: { label: '$300 CAD', button: 'Pre-order \u2014 $300 CAD', price: 300 },
+    US: { label: '$349 USD', button: 'Pre-order \u2014 $349 USD', price: 349 }
+  };
+  function applyCountry(cc) {
+    var p = PRICES[cc] || PRICES.CA;
+    document.getElementById('tp-price').textContent = p.label;
+    document.getElementById('tp-price-sub').textContent = cc === 'US' ? 'Shipping to the US. Includes all duties and import fees.' : 'Shipping to Canada.';
+    var ch = document.getElementById('ship-change'); if (ch) ch.textContent = cc === 'US' ? 'Ship to Canada instead' : 'Ship to the US instead';
+    var b = document.getElementById('add-to-cart-btn'); if (b) b.textContent = p.button;
+  }
+  var shipCountry = window.getShipCountry ? window.getShipCountry() : 'CA';
+  applyCountry(shipCountry);
+  document.getElementById('ship-change').addEventListener('click', function () {
+    shipCountry = shipCountry === 'US' ? 'CA' : 'US';
+    applyCountry(shipCountry);
+    if (window.setShipCountry) window.setShipCountry(shipCountry);
+  });
   var addToCartBtn = document.getElementById('add-to-cart-btn');
   if (addToCartBtn) {
     addToCartBtn.addEventListener('click', function() {
-      addToCart({ id: 'gid://shopify/ProductVariant/54518633333049', name: 'Touch Point Sconce (Pre-order)', price: 300, image: 'https://devansh.ca/images/touch-point-sconce/cover.png' });
+      addToCart({ id: 'gid://shopify/ProductVariant/54518633333049', name: 'Touch Point Sconce (Pre-order)', price: (PRICES[window.getShipCountry ? window.getShipCountry() : 'CA'] || PRICES.CA).price, image: 'https://devansh.ca/images/touch-point-sconce/cover.png' });
     });
   }
   var gallery = document.querySelector('.product-gallery');
