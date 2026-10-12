@@ -75,10 +75,31 @@ var SHOPIFY_CONFIG = {
   var COUNTRY_KEY = 'ods_ship_country';
   // No stored choice: guess from the browser's time zone (no network call,
   // no tracking). US zones -> US, everything else -> Canada.
+  // Covers the mainland, Alaska, Hawaii, the territories (Puerto Rico, the
+  // US Virgin Islands, Guam, the Northern Marianas, American Samoa) and the
+  // legacy zone aliases some browsers still report. Anything missing here
+  // silently prices a US buyer in CAD, so keep the list generous.
+  var US_TIME_ZONES = {
+    'America/Adak': 1, 'America/Anchorage': 1, 'America/Atka': 1,
+    'America/Boise': 1, 'America/Chicago': 1, 'America/Denver': 1,
+    'America/Detroit': 1, 'America/Fort_Wayne': 1, 'America/Indianapolis': 1,
+    'America/Juneau': 1, 'America/Knox_IN': 1, 'America/Los_Angeles': 1,
+    'America/Louisville': 1, 'America/Menominee': 1, 'America/Metlakatla': 1,
+    'America/New_York': 1, 'America/Nome': 1, 'America/Phoenix': 1,
+    'America/Puerto_Rico': 1, 'America/Shiprock': 1, 'America/Sitka': 1,
+    'America/St_Thomas': 1, 'America/Virgin': 1, 'America/Yakutat': 1,
+    'Pacific/Guam': 1, 'Pacific/Honolulu': 1, 'Pacific/Johnston': 1,
+    'Pacific/Midway': 1, 'Pacific/Pago_Pago': 1, 'Pacific/Saipan': 1,
+    'Pacific/Samoa': 1, 'Pacific/Wake': 1, 'Navajo': 1
+  };
   function detectCountry() {
     try {
       var tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
-      if (/^America\/(New_York|Chicago|Denver|Los_Angeles|Phoenix|Anchorage|Juneau|Sitka|Metlakatla|Nome|Yakutat|Adak|Boise|Detroit|Menominee|Indiana\/.+|Kentucky\/.+|North_Dakota\/.+)$/.test(tz) || /^Pacific\/Honolulu$/.test(tz) || /^US\//.test(tz)) return 'US';
+      if (US_TIME_ZONES[tz]) return 'US';
+      // Grouped zones (America/Indiana/Knox, America/Kentucky/Monticello,
+      // America/North_Dakota/Center) and the legacy US/ and SystemV/ prefixes.
+      if (/^America\/(Indiana|Kentucky|North_Dakota)\//.test(tz)) return 'US';
+      if (/^US\//.test(tz)) return 'US';
     } catch (e) {}
     return 'CA';
   }
@@ -87,13 +108,39 @@ var SHOPIFY_CONFIG = {
     return detectCountry();
   }
   window.getShipCountry = getShipCountry;
+
+  var EXPECTED_CURRENCY = { CA: 'CAD', US: 'USD' };
+
+  // A cart's currency is fixed when the cart is created. Changing the buyer's
+  // country afterwards switches which market's prices apply but can leave the
+  // old currency in place, which is how a US buyer ends up seeing the US price
+  // converted into CAD. If the currency doesn't follow the country, throw the
+  // cart away and build a new one with the same lines.
+  function recreateCartForCountry() {
+    var lines = (currentCart ? currentCart.lines : []).map(function (l) {
+      return { merchandiseId: l.variantId, quantity: l.qty };
+    });
+    currentCart = null;
+    try { localStorage.removeItem(CART_ID_KEY); } catch (e) {}
+    return createCart(lines);
+  }
+
   window.setShipCountry = function (cc) {
     try { localStorage.setItem(COUNTRY_KEY, cc); } catch (e) {}
     if (!currentCart) return Promise.resolve(null);
     var query = 'mutation cartBuyerIdentityUpdate($cartId: ID!, $buyerIdentity: CartBuyerIdentityInput!) { cartBuyerIdentityUpdate(cartId: $cartId, buyerIdentity: $buyerIdentity) { cart { ' + CART_FIELDS + ' } userErrors { field message } } }';
     return storefrontFetch(query, { cartId: currentCart.id, buyerIdentity: { countryCode: cc } }).then(function (res) {
       var payload = res.data && res.data.cartBuyerIdentityUpdate;
-      if (payload && payload.cart) { currentCart = cartFromResponse(payload.cart); renderCart(); }
+      if (payload && payload.userErrors && payload.userErrors.length) console.error('cartBuyerIdentityUpdate errors', payload.userErrors);
+      if (payload && payload.cart) currentCart = cartFromResponse(payload.cart);
+      var want = EXPECTED_CURRENCY[cc];
+      if (want && currentCart && currentCart.currencyCode !== want) return recreateCartForCountry();
+      return currentCart;
+    }).then(function (cart) {
+      renderCart();
+      return cart;
+    }).catch(function (err) {
+      console.error('setShipCountry failed', err);
       return currentCart;
     });
   };
