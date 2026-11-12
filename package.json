@@ -1,0 +1,8 @@
+{
+  "name": "devansh-ca",
+  "private": true,
+  "description": "devansh.ca static site plus /api/design (saved client lighting layouts)",
+  "dependencies": {
+    "@vercel/blob": "^2.9.0"
+  }
+}
